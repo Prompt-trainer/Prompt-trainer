@@ -1,0 +1,15 @@
+[project]
+name = "prompt-trainer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=6.0.1",
+    "django-crispy-forms>=2.5",
+    "black>=25.12.0",
+    "crispy-bootstrap5>=2025.6",
+    "django-filter>=25.2",
+    "python-decouple>=3.8",
+    "psycopg>=3.3.2",
+]
