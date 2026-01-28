@@ -22,8 +22,9 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    nickname = models.CharField(max_length=80)
-    rank = models.CharField(max_length=20) # Тут мають бути choices (?)
+    nickname = models.CharField(max_length=80, unique=True)
+    rank = models.CharField(max_length=20, choices=[('B', 'Bronze'), ('S', 'Silver'), ('G', 'Gold'),
+                                                    ('R', 'Ruby'), ('D', 'Diamond')])
     poins = models.IntegerField()
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
@@ -31,8 +32,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email" # Для скидання паролю
-    REQUIRED_FIELDS = ["first_name", "second_name"]
+    REQUIRED_FIELDS = ["nickname"]
     objects = CustomUserManager()
 
     def __str__(self):
-        return f'{self.first_name} {self.second_name} - {self.email}'
+        return f'{self.nickname} - {self.email}'
