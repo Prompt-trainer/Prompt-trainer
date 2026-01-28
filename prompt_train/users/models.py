@@ -24,8 +24,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=80, unique=True)
     rank = models.CharField(max_length=20, choices=[('B', 'Bronze'), ('S', 'Silver'), ('G', 'Gold'),
-                                                    ('R', 'Ruby'), ('D', 'Diamond')])
-    poins = models.IntegerField()
+                                                    ('R', 'Ruby'), ('D', 'Diamond')], default='B')
+    points = models.IntegerField(default=0)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     # Поле is_superuser відсутнє через наявність класу PermissionsMixin

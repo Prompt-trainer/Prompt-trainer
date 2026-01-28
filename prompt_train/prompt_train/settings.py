@@ -129,4 +129,39 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 AUTH_USER_MODEL = "users.CustomUser"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication settings
+LOGIN_URL = 'auth:login'
+LOGIN_REDIRECT_URL = 'auth:profile'
+LOGOUT_REDIRECT_URL = 'auth:login'
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis як broker
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Зберігання результатів
+
+# Серіалізація (JSON безпечніший за pickle)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Timezone (використовуй той самий що й Django)
+CELERY_TIMEZONE = 'Europe/Kiev'
+
+# Email конфігурація
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Сайт URL для посилань у листах
+SITE_URL = 'http://localhost:8000'
+
+# Опціонально: налаштування retry
+CELERY_TASK_ACKS_LATE = True  # Task підтверджується після виконання
+CELERY_TASK_REJECT_ON_WORKER_LOST = True  # Retry при падінні worker
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1 
+
