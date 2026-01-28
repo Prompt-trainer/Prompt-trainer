@@ -7,17 +7,24 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Prompt',
+            name="Prompt",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('prompt_text', models.CharField(max_length=500)),
-                ('improvement_hint', models.CharField(max_length=164)),
-                ('rate', models.DecimalField(decimal_places=1, max_digits=2)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("prompt_text", models.CharField(max_length=500)),
+                ("improvement_hint", models.CharField(max_length=164)),
+                ("rate", models.DecimalField(decimal_places=1, max_digits=2)),
             ],
         ),
     ]

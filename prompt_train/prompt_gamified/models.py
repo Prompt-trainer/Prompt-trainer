@@ -13,4 +13,5 @@ class Prompt(models.Model):
     def __str__(self):
         return f"{self.user} - '{self.prompt}'."
 
+
 # Має бути модель для гри з оцінюванням промптів, які можна задати через адмінку.
