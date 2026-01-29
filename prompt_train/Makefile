@@ -6,9 +6,8 @@ stop:
 	pkill -f runserver
 	pkill -f celery
 
-mm:
+makemigrations:
 	python manage.py makemigrations
 
-m:
+migrate:
 	python manage.py migrate
-

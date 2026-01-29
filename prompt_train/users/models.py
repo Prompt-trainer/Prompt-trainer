@@ -34,9 +34,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ],
         default="B",
     )
-    points = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)# валюта на платформі
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    exp = models.IntegerField(default=0)
     # Поле is_superuser відсутнє через наявність класу PermissionsMixin
 
     USERNAME_FIELD = "email"
@@ -46,3 +47,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.nickname} - {self.email}"
+    
+    def save(self, *args, **kwargs):
+        if self.exp < 3:
+            new_rank = "S"
+        elif self.exp < 7:
+            new_rank = "G"
+        elif self.exp < 12:
+            new_rank = "R"
+        elif self.exp < 17:
+            new_rank = "D"
+        if self.rank != new_rank:
+            self.rank = new_rank
+        super().save(*args, **kwargs)

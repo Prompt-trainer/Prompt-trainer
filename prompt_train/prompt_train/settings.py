@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django_filters",
     "prompt_gamified",
     "users",
+    'sslserver',
 ]
 
 MIDDLEWARE = [
