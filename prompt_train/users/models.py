@@ -49,14 +49,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.nickname} - {self.email}"
     
     def save(self, *args, **kwargs):
-        if self.exp < 3:
-            new_rank = "S"
-        elif self.exp < 7:
-            new_rank = "G"
-        elif self.exp < 12:
-            new_rank = "R"
-        elif self.exp < 17:
+        new_rank = self.rank
+        if self.exp > 18:
             new_rank = "D"
+        elif self.exp > 12:
+            new_rank = "R"
+        elif self.exp > 7:
+            new_rank = "G"
+        elif self.exp > 3:
+            new_rank = "S"
         if self.rank != new_rank:
             self.rank = new_rank
         super().save(*args, **kwargs)

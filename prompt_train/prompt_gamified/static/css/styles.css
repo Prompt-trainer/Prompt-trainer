@@ -1,0 +1,30 @@
+.header-bg {
+    background-color: #556;
+    background-image: linear-gradient(30deg, #445 12%, transparent 12.5%, transparent 87%, #445 87.5%, #445),
+        linear-gradient(150deg, #445 12%, transparent 12.5%, transparent 87%, #445 87.5%, #445),
+        linear-gradient(30deg, #445 12%, transparent 12.5%, transparent 87%, #445 87.5%, #445),
+        linear-gradient(150deg, #445 12%, transparent 12.5%, transparent 87%, #445 87.5%, #445),
+        linear-gradient(60deg, #99a 25%, transparent 25.5%, transparent 75%, #99a 75%, #99a),
+        linear-gradient(60deg, #99a 25%, transparent 25.5%, transparent 75%, #99a 75%, #99a);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    height: 600px;
+}
+
+/* Navbar: transparent at top, dark when scrolled */
+#mainNav {
+    /* transparent at top */
+    background-color: transparent;
+    transition: background-color 200ms ease-in-out, padding 200ms ease-in-out, box-shadow 200ms ease-in-out;
+}
+
+#mainNav.navbar-shrink {
+    /* dark background on scroll */
+    background-color: #212529;
+    box-shadow: 0 4px 10px #212529;
+}
+
+/* Ensure links stay readable */
+#mainNav.navbar-shrink .nav-link {
+    color: #fff !important;
+}

@@ -21,7 +21,7 @@ def register_view(request):
 
             send_registration_email_task.delay(user.id)
 
-            response = redirect("home-page")
+            response = redirect("prompt_gamified:home_page")
             response.set_cookie(
                 key="registration_success",
                 value="1",

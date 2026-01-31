@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand text-center" href="#">
+            <i class="bi bi-person-circle"></i>
+            Профіль
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                        href="{% url 'prompt_gamified:home_page' %}">Головна</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Режими
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Бібліотека прикладів</a></li>
+                        <li><a class="dropdown-item" href="#">Тренування</a></li>
+                        <li><a class="dropdown-item" href="#">Вгадай кращий промт</a></li>
+                        <li><a class="dropdown-item" href="#">PvP Батл</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Лідерборд</a>
+                </li>
+
+                <li class="nav-item">
+                    <button id="themeToggle" class="btn btn-outline-secondary ms-3">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </li>
+            </ul>
+
+            {% if request.user.is_authenticated %}
+            <form class="d-flex" method="post" action="{% url 'auth:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger me-2">Вийти</button>
+            </form>
+            <a class="btn btn-primary" href="{% url 'auth:login' %}">Змінити аккаунт</a>
+            {% else %}
+            <a class="btn btn-outline-primary me-2" href="{% url 'auth:login' %}">Увійти</a>
+            <a class="btn btn-primary" href="{% url 'auth:register' %}">Зареєструватися</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
