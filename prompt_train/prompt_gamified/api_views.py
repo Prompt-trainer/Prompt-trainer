@@ -37,7 +37,7 @@ class GoogleCallbackView(APIView):
         )
 
         login(request, user)
-        response = redirect('http://localhost:8000')
+        response = redirect('prompt_gamified:home_page')
         response.set_cookie(
             key="google_registration_success",
             value=1,
