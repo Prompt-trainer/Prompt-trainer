@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "django_filters",
     "prompt_gamified",
-    "users",
-    'sslserver',
+    "users"
 ]
 
 MIDDLEWARE = [
