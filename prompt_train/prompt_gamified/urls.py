@@ -3,4 +3,7 @@ from . import views
 
 app_name = "prompt_gamified"
 
-urlpatterns = []
+urlpatterns = [
+    path("", views.index_view, name="index"),
+    path("home", views.home_view, name="home_page"),
+]

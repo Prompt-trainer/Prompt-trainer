@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Prompt gamified
+{% endblock %}
+
+{% block styles %}
+<link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block nav %}
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="#header">Prompt gamified</a>
+        <button id="themeToggle" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-sun-fill"></i>
+        </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars ms-1"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ms-auto my-4 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#introduction">Introduction</a></li>
+                <li class="nav-item"><a class="nav-link" href="#games">Games</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+
+{% block header %}
+<!-- Header -->
+<header class="header-bg text-white text-center d-flex align-items-center" id="header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <h1 class="display-2"><strong>Prompt gamified</strong></h1>
+                <p class="display-6">Lorem ipsum dolor sit amet</p>
+                <a class="btn btn-primary btn-lg text-uppercase" href="{% url 'prompt_gamified:home_page' %}">Get
+                    Started!</a>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<!-- Introduction -->
+<section class="introduction-section text-center py-5" id="introduction">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="mb-4">Introduction</h2>
+                <p class="text-muted mb-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
+                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
+                    nisi enim cursus est, eget facilisis orci nulla eu augue. Pellentesque a orci vehicula, ornare
+                    sem vel, varius felis. Nullam ut diam nec arcu hendrerit suscipit. Ut urna ipsum, mattis a
+                    pellentesque eget, rhoncus ut erat. Duis ornare porttitor metus, id pulvinar nulla imperdiet
+                    vel. Aliquam quis sapien sit amet nisi consectetur condimentum eget non felis. Morbi viverra
+                    fermentum massa, a tempor sapien tempus in. Phasellus feugiat lorem nunc, id laoreet tortor
+                    vulputate quis. Aliquam erat volutpat. Vivamus porttitor fringilla orci, hendrerit iaculis odio
+                    bibendum ac. Etiam vel pulvinar ex. Donec neque dui, lobortis ac risus sit amet, facilisis
+                    ultricies neque. Sed auctor sed nisi eget pretium.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Games -->
+<section class="text-center py-5" id="games">
+    <div class="container">
+        <h2 class="mb-4">Games</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Тренування</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
+                            orci.</p>
+                        <a href="#" class="btn btn-primary">Play Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Вгадай кращий промт</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
+                            orci.</p>
+                        <a href="#" class="btn btn-primary">Play Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 3">
+                    <div class="card-body">
+                        <h5 class="card-title">PvP Батл</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
+                            orci.</p>
+                        <a href="#" class="btn btn-primary">Play Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="about py-5" id="about">
+    <div class="container-fluid p-0">
+        <h2 class="mb-4 text-center">About Us</h2>
+        <div class="row g-0">
+            <div class="col-lg-6 order-lg-2"
+                style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;"></div>
+            <div class="col-lg-6 order-lg-1 my-auto p-3 text-center">
+                <h2>Lorem ipsum dolor sit amet</h2>
+                <p class="lead mb-0">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
+                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
+                    nisi enim cursus est, eget facilisis orci nulla eu augue.
+                </p>
+            </div>
+        </div>
+        <div class="row g-0">
+            <div class="col-lg-6" style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;">
+            </div>
+            <div class="col-lg-6 my-auto p-3 text-center">
+                <h2>Lorem ipsum dolor sit amet</h2>
+                <p class="lead mb-0">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
+                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
+                    nisi enim cursus est, eget facilisis orci nulla eu augue.
+                </p>
+            </div>
+        </div>
+        <div class="row g-0">
+            <div class="col-lg-6 order-lg-2"
+                style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;"></div>
+            <div class="col-lg-6 order-lg-1 my-auto p-3 text-center">
+                <h2>Lorem ipsum dolor sit amet</h2>
+                <p class="lead mb-0">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
+                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
+                    nisi enim cursus est, eget facilisis orci nulla eu augue.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team-->
+<section class="text-center py-5" id="team">
+    <div class="container">
+        <h2 class="mb-4">Team</h2>
+        <div class="row">
+            <figure class="col-md-4 mb-4">
+                <blockquote class="blockquote">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                </figcaption>
+            </figure>
+            <figure class="col-md-4 mb-4">
+                <blockquote class="blockquote">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                </figcaption>
+            </figure>
+            <figure class="col-md-4 mb-4">
+                <blockquote class="blockquote">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<!-- Contact-->
+<section class="text-center py-5" id="contact">
+    <div class="container">
+        <h2 class="mb-4">Contact</h2>
+        <p class="mb-4">
+            If you have any questions, feel free to reach out to us at
+            <a href="mailto:contact@yourwebsite.com">contact@yourwebsite.com</a>
+        </p>
+        <form class="row g-3 justify-content-center">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="col-md-4">
+                <input type="email" class="form-control" placeholder="Your Email" required>
+            </div>
+            <div class="col-8">
+                <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
+            </div>
+            <div class="col-8">
+                <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block footer %}
+<footer class="footer py-3 border-top">
+    <div class="container text-center">
+        <a class="mx-2" href="https://github.com/Prompt-trainer/Prompt-trainer"><i class="bi bi-github"></i></a>
+        <small>&copy; 2026 Prompt Gamified. All Rights Reserved.</small>
+    </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/scripts.js' %}"></script>
+{% endblock %}
