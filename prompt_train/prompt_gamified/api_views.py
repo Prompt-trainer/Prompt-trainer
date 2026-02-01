@@ -2,16 +2,17 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.conf import settings
+from django.urls import reverse
 from rest_framework.views import APIView
 
-from prompt_train.oauth_secret import oauth
+from prompt_train.oauth import oauth
 from users.models import CustomUser
 
 
 class GoogleLoginView(APIView):
     def get(self, request):
-        redirect_url = 'http://localhost:8000/auth/google/callback/' # Має бути в Authorized redirect URIs
-        # Створення правильного url з даними oauth-клієнта
+        callback_path = reverse("prompt_gamified:google_callback")
+        redirect_url = request.build_absolute_uri(callback_path)
         return oauth.google.authorize_redirect(request, redirect_url)
     
 

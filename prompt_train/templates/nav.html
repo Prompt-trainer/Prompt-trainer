@@ -33,6 +33,14 @@
                     <a class="nav-link" href="#">Лідерборд</a>
                 </li>
 
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'chat:global_chat' %}">
+                        <i class="bi bi-chat-dots"></i> Чат
+                    </a>
+                </li>
+                {% endif %}
+
                 <li class="nav-item">
                     <button id="themeToggle" class="btn btn-outline-secondary ms-3">
                         <i class="bi bi-sun-fill"></i>

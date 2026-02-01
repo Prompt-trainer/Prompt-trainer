@@ -11,3 +11,7 @@ makemigrations:
 
 migrate:
 	python manage.py migrate
+
+run_https:
+	python manage.py runsslserver --certificate cert.pem --key key.pem
+	celery -A prompt_train.celery worker -l info

@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Глобальний Чат{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-chat-dots"></i> Глобальний Чат
+                        <span class="badge bg-light text-dark float-end" id="online-count">
+                            <i class="bi bi-people-fill"></i> Online
+                        </span>
+                    </h4>
+                </div>
+                <div class="card-body p-0" style="height: 500px; overflow-y: auto; background-color: var(--bs-body-bg);" id="chat-log">
+                    <div class="text-center text-muted py-5">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Завантаження...</span>
+                        </div>
+                        <p class="mt-2">Підключення до чату...</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input type="text" 
+                                id="chat-message-input" 
+                                class="form-control" 
+                                placeholder="Введіть повідомлення..." 
+                                autocomplete="off"
+                                maxlength="1000"
+                                required>
+                            <button class="btn btn-primary" type="submit" id="send-button">
+                                <i class="bi bi-send-fill"></i> Надіслати
+                            </button>
+                        </div>
+                        <small class="text-muted">Максимум 1000 символів</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .message-bubble {
+        max-width: 70%;
+        word-wrap: break-word;
+        animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message-own {
+        background-color: var(--bs-primary) !important;
+        color: white !important;
+    }
+    
+    .message-other {
+        background-color: var(--bs-secondary-bg);
+        color: var(--bs-body-color);
+    }
+    
+    #chat-log::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #chat-log::-webkit-scrollbar-track {
+        background: var(--bs-tertiary-bg);
+    }
+    
+    #chat-log::-webkit-scrollbar-thumb {
+        background: var(--bs-secondary);
+        border-radius: 4px;
+    }
+</style>
+
+<script>
+    const currentUserId = {{request.user.id}};
+    const currentUsername = "{{ request.user.nickname|escapejs }}";
+    const chatLog = document.querySelector('#chat-log');
+    const messageInput = document.querySelector('#chat-message-input');
+    const chatForm = document.querySelector('#chat-form');
+    const sendButton = document.querySelector('#send-button');
+    
+    // Construct WebSocket URL with fallback
+    function getWebSocketURL() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.host;
+        return `${protocol}//${host}/ws/chat/`;
+    }
+    
+    const chatSocket = new WebSocket(getWebSocketURL());
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    let reconnectTimeout;
+    
+    chatSocket.onopen = function(e) {
+        console.log('✅ WebSocket connection established:', getWebSocketURL());
+        reconnectAttempts = 0;
+        chatLog.innerHTML = '<div class="text-center text-muted py-3"><i class="bi bi-check-circle"></i> Підключено до чату</div>';
+    };
+    
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        
+        if (data.type === 'message_history') {
+            chatLog.innerHTML = '';
+            if (data.messages.length === 0) {
+                chatLog.innerHTML = '<div class="text-center text-muted py-5"><i class="bi bi-chat"></i><br>Немає повідомлень. Будьте першим!</div>';
+            } else {
+                data.messages.forEach(msg => appendMessage(msg));
+            }
+            scrollToBottom();
+        } else if (data.type === 'chat_message') {
+            appendMessage(data);
+            scrollToBottom();
+        }
+    };
+    
+    chatSocket.onclose = function(e) {
+        console.error('❌ Chat socket closed:', e.code, e.reason);
+        chatLog.innerHTML = '<div class="alert alert-danger m-3"><i class="bi bi-exclamation-triangle"></i> Втрачено з\'єднання з чатом.</div>';
+        
+        // Auto-reconnect with exponential backoff
+        if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts - 1), 30000);
+            console.log(`🔄 Спроба переподключення ${reconnectAttempts}/${maxReconnectAttempts} через ${delay}ms`);
+            
+            reconnectTimeout = setTimeout(() => {
+                location.reload();
+            }, delay);
+        } else {
+            chatLog.innerHTML += '<div class="alert alert-warning mt-3"><button class="btn btn-sm btn-primary" onclick="location.reload()">Оновити сторінку</button></div>';
+        }
+    };
+    
+    chatSocket.onerror = function(e) {
+        console.error('⚠️ WebSocket error:', e);
+        if (chatSocket.readyState === WebSocket.CLOSED) {
+            chatLog.innerHTML = '<div class="alert alert-danger m-3"><i class="bi bi-wifi-off"></i> Помилка з\'єднання. Перевірте консоль браузера (F12).</div>';
+        }
+    };
+    
+    chatForm.onsubmit = function(e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        
+        if (message && chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                'type': 'chat_message',
+                'message': message
+            }));
+            messageInput.value = '';
+            messageInput.focus();
+        }
+    };
+    
+    function appendMessage(data) {
+        const messageDiv = document.createElement('div');
+        const isOwn = data.user_id === currentUserId;
+        
+        messageDiv.className = `mb-3 px-3 ${isOwn ? 'text-end' : 'text-start'}`;
+        
+        const timestamp = new Date(data.timestamp).toLocaleTimeString('uk-UA', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        const bubbleClass = isOwn ? 'message-own' : 'message-other';
+        
+        messageDiv.innerHTML = `
+            <div class="d-inline-block ${bubbleClass} message-bubble rounded-3 px-3 py-2 shadow-sm">
+                <div class="d-flex align-items-center mb-1">
+                    <strong class="me-2">${escapeHtml(data.username)}</strong>
+                    <small class="opacity-75">${timestamp}</small>
+                </div>
+                <div class="message-content">${escapeHtml(data.message)}</div>
+            </div>
+        `;
+        
+        chatLog.appendChild(messageDiv);
+    }
+    
+    function scrollToBottom() {
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    
+    messageInput.focus();
+</script>
+{% endblock %}
