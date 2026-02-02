@@ -26,12 +26,13 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",  # ВАЖЛИВО: має бути першим, перед staticfiles
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,9 +42,13 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "django_filters",
+    "channels", 
     "prompt_gamified",
-    "users"
+    "users",
+    "chat", 
+    'sslserver',
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -151,9 +156,7 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Kiev"
 
 # Email конфігурація
-EMAIL_BACKEND = config(
-    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
@@ -168,3 +171,16 @@ SITE_URL = "http://localhost:8000"
 CELERY_TASK_ACKS_LATE = True  # Task підтверджується після виконання
 CELERY_TASK_REJECT_ON_WORKER_LOST = True  # Retry при падінні worker
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+
+ASGI_APPLICATION = "prompt_train.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
