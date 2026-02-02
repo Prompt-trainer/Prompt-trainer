@@ -9,7 +9,7 @@
 <header class="py-4 border-bottom">
     <div class="container text-center">
         <h1 class="display-6">Ласкаво просимо до Prompt Gamified!</h1>
-        <p class="lead">Прокачуй навички написання промтів через гру</p>
+        <p class="lead">Прокачуй навички написання промптів через гру</p>
     </div>
 </header>
 {% endblock %}
@@ -26,8 +26,9 @@
                 <p class="card-text mb-1">Твій досвід: </p>
                 <div class="progress mt-0 mb-2" role="progressbar" aria-label="Досвід користувача"
                     aria-valuenow="{{ user.exp }}" aria-valuemin="0" aria-valuemax="18">
-                    <div class="progress-bar progress-bar-striped" style="width: {% widthratio user.exp 18 100 %}%">{{
-                        user.exp }}</div>
+                    <div class="progress-bar progress-bar-striped" style="width: {% widthratio user.exp 18 100 %}%">
+                        {{user.exp }}
+                    </div>
                 </div>
                 <p class="card-text">Твої очки: {{ user.points }} <i class="bi bi-hurricane"></i></i></p>
                 <a href="#" class="btn btn-outline-primary my-2">Переглянути профіль</a>
@@ -41,7 +42,7 @@
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Тренування</h5>
-                        <p class="card-text">Напиши промт, отримай оцінку і поради</p>
+                        <p class="card-text">Напиши промпт, отримай оцінку і поради</p>
                         <a href="#" class="btn btn-outline-info">Грати</a>
                     </div>
                 </div>
@@ -50,7 +51,7 @@
             <div class="col">
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
-                        <h5 class="card-title">Вгадай кращий промт</h5>
+                        <h5 class="card-title">Вгадай кращий промпт</h5>
                         <p class="card-text">Обери правильний варіант</p>
                         <a href="#" class="btn btn-outline-info">Грати</a>
                     </div>
@@ -73,8 +74,8 @@
                 <div class="card h-100 border-success text-center p-2">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Бібліотека прикладів</h5>
-                        <p class="card-text">Перевірені якісні промти</p>
-                        <a href="#" class="btn btn-outline-success">Переглянути</a>
+                        <p class="card-text">Перевірені якісні промпти</p>
+                        <a href="{% url 'prompt_gamified:good_prompts' %}" class="btn btn-outline-success">Переглянути</a>
                     </div>
                 </div>
             </div>
