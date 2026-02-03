@@ -10,4 +10,5 @@ urlpatterns = [
     path("home", views.home_view, name="home_page"),
     path("auth/google/login/", GoogleLoginView.as_view(), name="google_login"),
     path("auth/google/callback/", GoogleCallbackView.as_view(), name="google_callback"),
+    path("good-prompts/", views.good_prompts_view, name="good_prompts"),
 ]
