@@ -1,36 +1,45 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand text-center" href="#">
+        <a class="navbar-brand text-center" href="{% url 'prompt_gamified:home_page' %}">
             <i class="bi bi-person-circle"></i>
             Профіль
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page"
-                        href="{% url 'prompt_gamified:home_page' %}">Головна</a>
+                       href="{% url 'prompt_gamified:home_page' %}">Головна</a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                         Режими
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Бібліотека прикладів</a></li>
-                        <li><a class="dropdown-item" href="#">Тренування</a></li>
-                        <li><a class="dropdown-item" href="#">Вгадай кращий промт</a></li>
+                        <li>
+                            <a class="dropdown-item"
+                            href="{% url 'prompt_gamified:good_prompts' %}">Бібліотека прикладів</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                            href="{% url 'prompt_gamified:prompt_trainer' %}">Тренування</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Вгадай кращий промпт</a></li>
                         <li><a class="dropdown-item" href="#">PvP Батл</a></li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Лідерборд</a>
+                    <a class="nav-link" href="{% url 'prompt_gamified:leaderboard' %}">Лідерборд</a>
                 </li>
 
                 {% if request.user.is_authenticated %}
@@ -42,7 +51,7 @@
                 {% endif %}
 
                 <li class="nav-item">
-                    <button id="themeToggle" class="btn btn-outline-secondary ms-3">
+                    <button id="themeToggle" class="btn btn-outline-secondary ms-3" type="button">
                         <i class="bi bi-sun-fill"></i>
                     </button>
                 </li>
