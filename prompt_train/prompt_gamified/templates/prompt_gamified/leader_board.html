@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Лідерборд - Prompt Trainer{% endblock %}
+
+{% block styles %}
+<style>
+    .leaderboard-header {
+        text-align: center;
+        padding: 2rem 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        color: white;
+    }
+
+    .leaderboard-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .leaderboard-stats {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .leaderboard-table {
+        background-color: var(--bs-dark);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .table {
+        margin-bottom: 0;
+        color: var(--bs-light);
+    }
+
+    .table thead th {
+        background-color: #2d3748;
+        border-bottom: 2px solid #4a5568;
+        padding: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #4a5568;
+    }
+
+    .table tbody tr:hover {
+        background-color: #2d3748;
+        transform: scale(1.02);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .rank-position {
+        font-size: 1.5rem;
+        font-weight: bold;
+        width: 80px;
+    }
+
+    .rank-position.top-1 {
+        color: #ffd700;
+    }
+
+    .rank-position.top-2 {
+        color: #c0c0c0;
+    }
+
+    .rank-position.top-3 {
+        color: #cd7f32;
+    }
+
+    .rank-badge {
+        display: inline-block;
+        padding: 0.35rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+    }
+
+    .rank-bronze {
+        background-color: #cd7f32;
+        color: white;
+    }
+
+    .rank-silver {
+        background-color: #c0c0c0;
+        color: #1a202c;
+    }
+
+    .rank-gold {
+        background-color: #ffd700;
+        color: #1a202c;
+    }
+
+    .rank-ruby {
+        background-color: #e0115f;
+        color: white;
+    }
+
+    .rank-diamond {
+        background-color: #b9f2ff;
+        color: #1a202c;
+    }
+
+    .user-nickname {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #e2e8f0;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .page-link {
+        background-color: #2d3748;
+        border-color: #4a5568;
+        color: #e2e8f0;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .page-link:hover {
+        background-color: #667eea;
+        border-color: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .page-item.active .page-link {
+        background-color: #667eea;
+        border-color: #667eea;
+        color: white;
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #1a202c;
+        border-color: #2d3748;
+        color: #4a5568;
+    }
+
+    .current-page-info {
+        font-size: 1rem;
+        color: #cbd5e0;
+        font-weight: 500;
+    }
+
+    .trophy-icon {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .leaderboard-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .table {
+            font-size: 0.875rem;
+        }
+
+        .rank-position {
+            font-size: 1.2rem;
+            width: 50px;
+        }
+
+        .user-nickname {
+            font-size: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="leaderboard-header">
+    <h1>
+        <i class="bi bi-trophy-fill trophy-icon"></i>
+        Лідерборд
+    </h1>
+    <p class="leaderboard-stats">
+        <i class="bi bi-people-fill"></i> Всього гравців: <strong>{{ total_users }}</strong>
+    </p>
+</div>
+
+<div class="leaderboard-table">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th><i class="bi bi-hash"></i> Місце</th>
+                <th><i class="bi bi-person-circle"></i> Нікнейм</th>
+                <th><i class="bi bi-award-fill"></i> Ранг</th>
+                <th><i class="bi bi-star-fill"></i> Досвід</th>
+                <th><i class="bi bi-coin"></i> Поінти</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in page_obj %}
+            <tr>
+                <td class="rank-position {% if user.rank_position == 1 %}top-1{% elif user.rank_position == 2 %}top-2{% elif user.rank_position == 3 %}top-3{% endif %}">
+                    {% if user.rank_position == 1 %}
+                        <i class="bi bi-trophy-fill"></i>
+                    {% elif user.rank_position == 2 %}
+                        <i class="bi bi-trophy"></i>
+                    {% elif user.rank_position == 3 %}
+                        <i class="bi bi-award"></i>
+                    {% else %}
+                        {{ user.rank_position }}
+                    {% endif %}
+                </td>
+                <td class="user-nickname">{{ user.nickname }}</td>
+                <td>
+                    {% if user.rank == 'B' %}
+                        <span class="rank-badge rank-bronze">Bronze</span>
+                    {% elif user.rank == 'S' %}
+                        <span class="rank-badge rank-silver">Silver</span>
+                    {% elif user.rank == 'G' %}
+                        <span class="rank-badge rank-gold">Gold</span>
+                    {% elif user.rank == 'R' %}
+                        <span class="rank-badge rank-ruby">Ruby</span>
+                    {% elif user.rank == 'D' %}
+                        <span class="rank-badge rank-diamond">Diamond</span>
+                    {% endif %}
+                </td>
+                <td><span class="stat-value">{{ user.exp }}</span></td>
+                <td><span class="stat-value">{{ user.points }}</span></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.3;"></i>
+                    <p class="mt-2" style="opacity: 0.5;">Немає користувачів</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination-container">
+    <nav aria-label="Навігація по сторінках лідерборду">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Перша">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Попередня">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="bi bi-chevron-double-left"></i></span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link current-page-info">
+                    Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Наступна">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Остання">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="bi bi-chevron-double-right"></i></span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}
+{% endblock %}

@@ -21,17 +21,17 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-expanded="false">
                         Режими
                     </a>
                     <ul class="dropdown-menu">
                         <li>
                             <a class="dropdown-item"
-                               href="{% url 'prompt_gamified:good_prompts' %}">Бібліотека прикладів</a>
+                            href="{% url 'prompt_gamified:good_prompts' %}">Бібліотека прикладів</a>
                         </li>
                         <li>
                             <a class="dropdown-item"
-                               href="{% url 'prompt_gamified:prompt_trainer' %}">Тренування</a>
+                            href="{% url 'prompt_gamified:prompt_trainer' %}">Тренування</a>
                         </li>
                         <li><a class="dropdown-item" href="#">Вгадай кращий промпт</a></li>
                         <li><a class="dropdown-item" href="#">PvP Батл</a></li>
@@ -39,7 +39,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Лідерборд</a>
+                    <a class="nav-link" href="{% url 'prompt_gamified:leaderboard' %}">Лідерборд</a>
                 </li>
 
                 {% if request.user.is_authenticated %}
