@@ -23,4 +23,5 @@ dependencies = [
     "channels-redis>=4.0.0",
     "daphne>=4.0.0",
     "django-allauth>=65.14.0",
+    "openai>=2.16.0",
 ]
