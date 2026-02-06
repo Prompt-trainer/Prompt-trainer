@@ -9,12 +9,26 @@
         <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-chat-dots"></i> Глобальний Чат
-                        <span class="badge bg-light text-dark float-end" id="online-count">
-                            <i class="bi bi-people-fill"></i> Online
-                        </span>
-                    </h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-chat-dots"></i> Глобальний Чат
+                            <span class="badge bg-light text-dark ms-2" id="online-count">
+                                <i class="bi bi-people-fill"></i> Online
+                            </span>
+                        </h4>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'chat:conversations_list' %}" 
+                               class="btn btn-light btn-sm" 
+                               title="Мої розмови">
+                                <i class="bi bi-chat-left-text"></i> Приватні чати
+                            </a>
+                            <a href="{% url 'chat:users_list' %}" 
+                               class="btn btn-success btn-sm" 
+                               title="Почати новий чат">
+                                <i class="bi bi-plus-circle"></i> Новий чат
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body p-0" style="height: 500px; overflow-y: auto; background-color: var(--bs-body-bg);" id="chat-log">
                     <div class="text-center text-muted py-5">
@@ -38,7 +52,7 @@
                                 <i class="bi bi-send-fill"></i> Надіслати
                             </button>
                         </div>
-                        <small class="text-muted">Максимум 1000 символів</small>
+                        <small class="text-muted">Максимум 1000 символів • Натисніть Enter для відправки</small>
                     </form>
                 </div>
             </div>
@@ -68,6 +82,22 @@
         color: var(--bs-body-color);
     }
     
+    .message-content {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    
+    .username-link {
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    
+    .username-link:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+    
     #chat-log::-webkit-scrollbar {
         width: 8px;
     }
@@ -90,7 +120,6 @@
     const chatForm = document.querySelector('#chat-form');
     const sendButton = document.querySelector('#send-button');
     
-    // Construct WebSocket URL with fallback
     function getWebSocketURL() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.host;
@@ -129,7 +158,6 @@
         console.error('❌ Chat socket closed:', e.code, e.reason);
         chatLog.innerHTML = '<div class="alert alert-danger m-3"><i class="bi bi-exclamation-triangle"></i> Втрачено з\'єднання з чатом.</div>';
         
-        // Auto-reconnect with exponential backoff
         if (reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
             const delay = Math.min(1000 * Math.pow(2, reconnectAttempts - 1), 30000);
@@ -177,10 +205,16 @@
         
         const bubbleClass = isOwn ? 'message-own' : 'message-other';
         
+        const usernameHtml = isOwn 
+            ? `<strong class="me-2">${escapeHtml(data.username)}</strong>`
+            : `<a href="/chat/private/${data.user_id}/" class="username-link text-decoration-none me-2" title="Відкрити приватний чат">
+                 <strong>${escapeHtml(data.username)}</strong>
+               </a>`;
+        
         messageDiv.innerHTML = `
             <div class="d-inline-block ${bubbleClass} message-bubble rounded-3 px-3 py-2 shadow-sm">
                 <div class="d-flex align-items-center mb-1">
-                    <strong class="me-2">${escapeHtml(data.username)}</strong>
+                    ${usernameHtml}
                     <small class="opacity-75">${timestamp}</small>
                 </div>
                 <div class="message-content">${escapeHtml(data.message)}</div>
@@ -199,7 +233,6 @@
         div.textContent = text;
         return div.innerHTML;
     }
-    
     
     messageInput.focus();
 </script>
