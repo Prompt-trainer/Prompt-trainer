@@ -760,23 +760,6 @@ wheels = [
 ]
 
 [[package]]
-name = "perplexityai"
-version = "0.26.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "anyio" },
-    { name = "distro" },
-    { name = "httpx" },
-    { name = "pydantic" },
-    { name = "sniffio" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/04/72/23f413a68510088a062573b5573de723d74743a68541ad9fb009d8632144/perplexityai-0.26.0.tar.gz", hash = "sha256:90f62b5272889771ccd2b2aed4e77e54190d3d0b657835bde82ea1e0d3a03f51", size = 122406, upload-time = "2026-01-24T03:22:39.32Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/a8/df78ed24813b7a94ff19819454b97e6718152ed55dc334fbeb291531f6e5/perplexityai-0.26.0-py3-none-any.whl", hash = "sha256:830bc75046a61d84918013b15e7e037b3c7795680edfc646bf243bda501a33d1", size = 111766, upload-time = "2026-01-24T03:22:37.773Z" },
-]
-
-[[package]]
 name = "platformdirs"
 version = "4.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -816,11 +799,11 @@ dependencies = [
     { name = "django-rest-framework" },
     { name = "django-sslserver-v2" },
     { name = "openai" },
-    { name = "perplexityai" },
     { name = "psycopg" },
     { name = "python-decouple" },
     { name = "redis" },
     { name = "requests" },
+    { name = "whitenoise" },
 ]
 
 [package.metadata]
@@ -839,11 +822,11 @@ requires-dist = [
     { name = "django-rest-framework", specifier = ">=0.1.0,<0.2.0" },
     { name = "django-sslserver-v2", specifier = ">=1.0" },
     { name = "openai", specifier = ">=2.16.0" },
-    { name = "perplexityai", specifier = ">=0.26.0" },
     { name = "psycopg", specifier = ">=3.3.2" },
     { name = "python-decouple", specifier = ">=3.8" },
     { name = "redis", specifier = ">=7.1.0" },
     { name = "requests", specifier = ">=2.32.5" },
+    { name = "whitenoise", specifier = ">=6.11.0" },
 ]
 
 [[package]]
@@ -1248,6 +1231,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/64/6e/62daec357285b927e82263a81f3b4c1790215bc77c42530ce4a69d501a43/wcwidth-0.5.0.tar.gz", hash = "sha256:f89c103c949a693bf563377b2153082bf58e309919dfb7f27b04d862a0089333", size = 246585, upload-time = "2026-01-27T01:31:44.942Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f2/3e/45583b67c2ff08ad5a582d316fcb2f11d6cf0a50c7707ac09d212d25bc98/wcwidth-0.5.0-py3-none-any.whl", hash = "sha256:1efe1361b83b0ff7877b81ba57c8562c99cf812158b778988ce17ec061095695", size = 93772, upload-time = "2026-01-27T01:31:43.432Z" },
+]
+
+[[package]]
+name = "whitenoise"
+version = "6.11.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/15/95/8c81ec6b6ebcbf8aca2de7603070ccf37dbb873b03f20708e0f7c1664bc6/whitenoise-6.11.0.tar.gz", hash = "sha256:0f5bfce6061ae6611cd9396a8231e088722e4fc67bc13a111be74c738d99375f", size = 26432, upload-time = "2025-09-18T09:16:10.995Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6c/e9/4366332f9295fe0647d7d3251ce18f5615fbcb12d02c79a26f8dba9221b3/whitenoise-6.11.0-py3-none-any.whl", hash = "sha256:b2aeb45950597236f53b5342b3121c5de69c8da0109362aee506ce88e022d258", size = 20197, upload-time = "2025-09-18T09:16:09.754Z" },
 ]
 
 [[package]]
