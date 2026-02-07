@@ -82,6 +82,8 @@ def leaderboard_view(request):
         'total_users': paginator.count,
     }
     return render(request, "prompt_gamified/leader_board.html", context)
+
+
 @login_required
 def challenge_view(request):
     
