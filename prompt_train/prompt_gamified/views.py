@@ -1,12 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+import random
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from httpx import request
 from users.models import CustomUser
 from .ai_func import evaluate_prompt_quality
 from django.http import JsonResponse
 from .models import Prompt
 from django.db import transaction
 from django.core.paginator import Paginator
+import random
+from django.db import transaction
+from .utils import handle_challenge_get, handle_challenge_post
 
 def index_view(request):
     return render(request, "prompt_gamified/index.html")
@@ -24,7 +29,6 @@ def good_prompts_view(request):
 @login_required
 def prompt_trainer_view(request):
     context = {}
-
     if request.method == "POST":
         user_message = request.POST.get("prompt", "").strip()
 
@@ -78,3 +82,16 @@ def leaderboard_view(request):
         'total_users': paginator.count,
     }
     return render(request, "prompt_gamified/leader_board.html", context)
+
+
+@login_required
+def challenge_view(request):
+    
+    if request.method == "GET":
+        context = handle_challenge_get(request)
+    else:  
+        context = handle_challenge_post(request)
+        if context is None:
+            return redirect('prompt_gamified:challenge')
+    
+    return render(request, "prompt_gamified/challenge.html", context)
