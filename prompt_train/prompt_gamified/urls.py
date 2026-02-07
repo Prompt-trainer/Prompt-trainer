@@ -10,4 +10,6 @@ urlpatterns = [
     path("home", views.home_view, name="home_page"),
     path("auth/google/login/", GoogleLoginView.as_view(), name="google_login"),
     path("auth/google/callback/", GoogleCallbackView.as_view(), name="google_callback"),
+    path("social/github/login/", views.github_login_view, name="github_login"),
+    path("social/github/callback/", views.github_login_callback, name="github_callback")
 ]

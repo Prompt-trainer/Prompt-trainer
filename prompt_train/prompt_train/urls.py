@@ -23,4 +23,6 @@ urlpatterns = [
     path("auth/", include("users.urls")),
     path("", include("prompt_gamified.urls")),
     path("chat/", include("chat.urls")),
+    path("accounts/", include("allauth.urls")),
+    path("social/", include("allauth.socialaccount.urls")),
 ]

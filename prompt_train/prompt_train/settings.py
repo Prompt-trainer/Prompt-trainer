@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     "prompt_gamified",
     "users",
     "chat", 
-    'sslserver',
+    "sslserver",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
 ]
 
 
@@ -58,7 +62,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware"
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
 
 ROOT_URLCONF = "prompt_train.urls"
 
@@ -112,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -184,3 +193,23 @@ CHANNEL_LAYERS = {
     },
 }
 CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
+
+SITE_ID = 1
+
+# ALL-AUTH
+
+ACCOUNT_UNIQUE_EMAIL = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        "APP": {
+            "client_id": config("GITHUB_OAUTH_CLIENT_ID"),
+            "secret": config("GITHUB_OAUTH_CLIENT_SECRET"),
+            "key": ""
+        },
+        "SCOPE": ["user", "user:email"],
+        "VERIFIED_EMAIL": True
+    }
+}
+# Додатковий запит якщо email не прийшов
+SOCIALACCOUNT_QUERY_EMAIL = True

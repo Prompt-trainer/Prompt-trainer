@@ -1,5 +1,6 @@
 .gsi-material-button {
     -moz-user-select: none;
+    /* webkit використовується для старих браузерів */
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-appearance: none;
@@ -7,16 +8,16 @@
     background-image: none;
     border: 1px solid #747775;
     -webkit-border-radius: 4px;
-    border-radius: 4px;
+    border-radius: 7px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    color: #1f1f1f;
+    color: black;
     cursor: pointer;
     font-family: 'Roboto', arial, sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     height: 40px;
     letter-spacing: 0.25px;
-    outline: none;
+    outline: none; /* Прибирає синю рамку при наведенні */
     overflow: hidden;
     padding: 0 12px;
     position: relative;
@@ -26,11 +27,17 @@
     vertical-align: middle;
     white-space: nowrap;
     width: 100%;
-    max-width: 400px;
+    max-width: 425px;
     min-width: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.gsi-material-button,
+.gsi-material-button:hover,
+.gsi-material-button:active {
+    text-decoration: none;
 }
 
 .gsi-material-button .gsi-material-button-icon {
@@ -41,7 +48,6 @@
 }
 
 .gsi-material-button .gsi-material-button-content-wrapper {
-    -webkit-align-items: center;
     align-items: center;
     display: inline-flex;
     -webkit-flex-direction: row;
@@ -57,17 +63,13 @@
 }
 
 .gsi-material-button .gsi-material-button-contents {
-    -webkit-flex-grow: 1;
     flex-grow: 1;
-    font-family: 'Roboto', arial, sans-serif;
     font-weight: 500;
     overflow: hidden;
-    text-overflow: ellipsis;
     vertical-align: top;
 }
 
 .gsi-material-button .gsi-material-button-state {
-    -webkit-transition: opacity .218s;
     transition: opacity .218s;
     bottom: 0;
     left: 0;
@@ -91,15 +93,9 @@
     opacity: 38%;
 }
 
-.gsi-material-button:not(:disabled):active .gsi-material-button-state, 
-.gsi-material-button:not(:disabled):focus .gsi-material-button-state {
+.gsi-material-button:not(:disabled):active .gsi-material-button-state {
     background-color: #303030;
     opacity: 12%;
-}
-
-.gsi-material-button:not(:disabled):hover {
-    -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
 }
 
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}
 Вхід
@@ -8,6 +9,7 @@
 
 {% block styles %}
 <link href="{% static 'css/google_button.css' %}" rel="stylesheet">
+<link href="{% static 'css/github_button.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -36,6 +38,16 @@
                                 </div>
                             <span class="gsi-material-button-contents">Увійти з Google</span>
                             <span style="display: none;">Увійти з Google</span>
+                            </div>
+                        </a>
+                        <a class="github-button" href="{% provider_login_url 'github' %}">
+                            <div class="github-button-state"></div>
+                            <div class="github-button-content-wrapper">
+                                <div class="github-button-icon">
+                                    <i class="bi bi-github"></i>
+                                </div>
+                                <span class="github-button-contents">Увійти з GitHub</span>
+                                <span style="display: none;">Увійти з GitHub</span>
                             </div>
                         </a>
                 </form>

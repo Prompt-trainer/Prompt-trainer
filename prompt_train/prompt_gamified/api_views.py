@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.urls import reverse
 from rest_framework.views import APIView
+from django.views import View
 
 from prompt_train.oauth import oauth
 from users.models import CustomUser
@@ -36,6 +37,8 @@ class GoogleCallbackView(APIView):
                 'nickname': nickname
             }
         )
+        user.is_active = True
+        user.save()
 
         login(request, user)
         response = redirect('prompt_gamified:home_page')
@@ -48,6 +51,7 @@ class GoogleCallbackView(APIView):
             samesite="Lax", 
             secure= not settings.DEBUG,
         )
+
         messages.success(request, "Реєстрація успішна!")
 
         return response
