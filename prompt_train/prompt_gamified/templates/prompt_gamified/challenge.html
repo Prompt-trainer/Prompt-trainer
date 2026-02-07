@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Челендж режим{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🎯 Челендж режим</h1>
+    
+    {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+    {% endif %}
+    
+    {% if not result %}
+        <!-- Режим вибору челенджу -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Випадковий промпт-суперник</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Оцінка:</strong> {{ challenge_prompt.rate }}/10</p>
+                <p><strong>Промпт:</strong> {{ challenge_prompt.prompt_text }}</p>
+                <p><strong>Підказка:</strong> {{ challenge_prompt.improvement_hint }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>Ваш промпт</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="prompt">Напишіть промпт, який отримає вищу оцінку:</label>
+                        <textarea 
+                            name="prompt" 
+                            id="prompt" 
+                            class="form-control" 
+                            rows="5" 
+                            maxlength="500" 
+                            required
+                            placeholder="Введіть ваш промпт тут..."
+                        ></textarea>
+                        <small class="form-text text-muted">Максимум 500 символів</small>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg">Порівняти промпти</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <!-- Режим показу результату -->
+        <div class="alert {% if result == 'win' %}alert-success{% elif result == 'draw' %}alert-info{% else %}alert-danger{% endif %}">
+            <h2 class="text-center">{{ message }}</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-3 border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h4>Промпт-суперник</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Оцінка:</strong> {{ challenge_rate }}/10</p>
+                        <p><strong>Промпт:</strong> {{ challenge_prompt.prompt_text }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-3 {% if result == 'win' %}border-success{% elif result == 'draw' %}border-info{% else %}border-danger{% endif %}">
+                    <div class="card-header {% if result == 'win' %}bg-success{% elif result == 'draw' %}bg-info{% else %}bg-danger{% endif %} text-white">
+                        <h4>Ваш промпт</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Оцінка:</strong> {{ user_rate }}/10</p>
+                        <p><strong>Промпт:</strong> {{ user_prompt }}</p>
+                        <p><strong>Підказка:</strong> {{ improvement_hint }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'prompt_gamified:challenge' %}" class="btn btn-primary btn-lg">Новий челендж</a>
+            <a href="{% url 'prompt_gamified:home_page' %}" class="btn btn-secondary btn-lg">Повернутися додому</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
