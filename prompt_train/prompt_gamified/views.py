@@ -11,7 +11,7 @@ from django.db import transaction
 from django.core.paginator import Paginator
 import random
 from django.db import transaction
-from .utils import handle_challenge_get, handle_challenge_post
+from .utils import handle_challenge_get, handle_challenge_post, handle_guess_the_best_prompt_get, handle_guess_the_best_prompt_post
 
 def index_view(request):
     return render(request, "prompt_gamified/index.html")
@@ -95,3 +95,15 @@ def challenge_view(request):
             return redirect('prompt_gamified:challenge')
     
     return render(request, "prompt_gamified/challenge.html", context)
+
+
+@login_required
+def guess_the_best_prompt_view(request):
+    if request.method == "GET":
+        context = handle_guess_the_best_prompt_get(request)
+    else:
+        context = handle_guess_the_best_prompt_post(request)
+        if context is None:
+            return redirect('prompt_gamified:guess_the_best_prompt')
+        
+    return render(request, "prompt_gamified/guess_the_best_prompt.html", context)
