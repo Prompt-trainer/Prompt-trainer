@@ -61,3 +61,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         if self.rank != new_rank:
             self.rank = new_rank
         super().save(*args, **kwargs)
+        
+    def has_perm(self, perm, obj=None):
+        return self.is_staff
+    
+    def has_module_perms(self, app_label):
+        return self.is_staff
