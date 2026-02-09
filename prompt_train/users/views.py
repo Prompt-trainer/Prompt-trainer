@@ -17,7 +17,7 @@ def register_view(request):
             user = form.save(commit=False)
             user.is_active = True
             user.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             send_registration_email_task.delay(user.id)
 

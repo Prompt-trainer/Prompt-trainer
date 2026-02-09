@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting to GitHub...</title>
+</head>
+<body>
+    <p>Перенаправлення на GitHub...</p>
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="process" value="login">
+    </form>
+    
+    <script>
+        const form = document.querySelector('form');
+        // Автоматичне надсилання форми
+        if (form) {
+            form.submit();
+        }
+    </script>
+</body>
+</html>

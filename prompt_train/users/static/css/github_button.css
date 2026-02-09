@@ -1,4 +1,4 @@
-.auth-button {
+.github-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,11 +21,11 @@
     cursor: pointer;
 }
 
-.auth-button:hover {
+.github-button:hover {
     background-color: #f7f8f8;
 }
 
-.auth-button-content-wrapper {
+.github-button-content-wrapper {
     display: flex;
     align-items: center;
     flex-direction: row-reverse; /* Вирівнюється справа */
@@ -33,16 +33,16 @@
     gap: 8px;
 }
 
-.auth-button-icon svg {
+.github-button-icon svg {
     width: 18px;
     height: 18px;
     display: block;
 }
 
-.auth-button-contents {
+.github-button-contents {
     white-space: nowrap;
 }
 
-.auth-button-state {
+.github-button-state {
     display: none;
 }
