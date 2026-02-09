@@ -142,6 +142,43 @@ def handle_challenge_post(request) -> dict:
     
     return context
 
+def handle_prompt_trainer_post(user, user_message: str) -> tuple[dict, str | None]:
+    user_message = user_message.strip()
+    
+    if not user_message:
+        return {}, "Будь ласка, введіть промпт."
+
+    if len(user_message) > 500:
+        return {}, "Промпт має бути не більше 500 символів."
+
+    rate, improvement_hint, refined_prompt = evaluate_prompt_quality(user_message)
+
+    Prompt.objects.create(
+        prompt_text=user_message,
+        improvement_hint=improvement_hint,
+        rate=rate,
+        user=user,
+    )
+
+    updated_fields = []
+    if rate > 7:
+        user.exp += 1
+        updated_fields.append("exp")
+    if rate >= 8:
+        user.points += 20
+        updated_fields.append("points")
+
+    if updated_fields:
+        with transaction.atomic():
+            user.save(update_fields=updated_fields)
+
+    context = {
+        "prompt_text": user_message,
+        "prompt_rate": rate,
+        "improvement_hint": improvement_hint,
+        "refined_prompt": refined_prompt,
+    }
+    return context, None
 
 def handle_guess_the_best_prompt_get(request) -> dict:
     context = {}
