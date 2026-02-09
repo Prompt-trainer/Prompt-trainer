@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вгадай кращий промпт{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Вгадай кращий промпт</h1>
+
+    {% if error %}
+    <div class="alert alert-warning">{{ error }}</div>
+    {% endif %}
+
+    {% if not result %}
+    <!-- Режим вибору челенджу -->
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card border-primary mb-4 h-100">
+                    <div class="card-header bg-transparent border-primary">
+                        <h3>Перший промпт</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Промпт:</strong> {{ prompts.0.prompt_text }}</p>
+                        <button type="submit" name="prompt_id" value="{{ prompts.0.id }}" class="btn btn-primary">
+                            Вибрати цей промпт
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-primary mb-4 h-100">
+                    <div class="card-header bg-transparent border-primary">
+                        <h3>Другий промпт</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Промпт:</strong> {{ prompts.1.prompt_text }}</p>
+                        <button type="submit" name="prompt_id" value="{{ prompts.1.id }}" class="btn btn-primary">
+                            Вибрати цей промпт
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <!-- Режим показу результату -->
+    <div class="alert {% if result == 'win' %}alert-success{% else %}alert-danger{% endif %}">
+        <h2 class="text-center">{{ message }}</h2>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-3 border-success h-100">
+                <div class="card-header bg-success text-white">
+                    <h4>Кращий промпт</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Оцінка:</strong> {{ best_prompt.rate }}/10</p>
+                    <p><strong>Промпт:</strong> {{ best_prompt.prompt_text }}</p>
+                    <p><strong>Підказка:</strong> {{ best_prompt.improvement_hint }}</p>
+                </div>
+            </div>
+        </div>
+        {% if worst_prompt %}
+        <div class="col-md-6">
+            <div class="card mb-3 border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h4>Гірший промпт</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Оцінка:</strong> {{ worst_prompt.rate }}/10</p>
+                    <p><strong>Промпт:</strong> {{ worst_prompt.prompt_text }}</p>
+                    <p><strong>Підказка:</strong> {{ worst_prompt.improvement_hint }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'prompt_gamified:guess_the_best_prompt' %}" class="btn btn-primary btn-lg">Нова гра</a>
+        <a href="{% url 'prompt_gamified:home_page' %}" class="btn btn-secondary btn-lg">Повернутися додому</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

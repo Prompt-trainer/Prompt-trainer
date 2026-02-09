@@ -16,4 +16,5 @@ urlpatterns = [
     path("prompt-trainer/", views.prompt_trainer_view, name="prompt_trainer"),
     path("leaderboard/", views.leaderboard_view, name="leaderboard"),
     path('challenge/', views.challenge_view, name='challenge'),
+    path('guess-the-best-prompt/', views.guess_the_best_prompt_view, name='guess_the_best_prompt'),
 ]

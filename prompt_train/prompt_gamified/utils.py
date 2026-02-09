@@ -5,13 +5,36 @@ from .ai_func import evaluate_prompt_quality
 
 
 
-def get_random_high_rated_prompt() -> Prompt | None:
-    high_rated_prompts = Prompt.objects.filter(rate__gte=7)
+def get_random_high_rated_prompt(min_rate = 7) -> Prompt | None:
+    high_rated_prompts = Prompt.objects.filter(rate__gte=min_rate)
     
     if not high_rated_prompts.exists():
         return None
     
     return random.choice(high_rated_prompts)
+
+
+def get_random_low_rated_prompt(max_rate = 4) -> Prompt | None:
+    low_rated_prompts = Prompt.objects.filter(rate__lte=max_rate)
+    
+    if not low_rated_prompts.exists():
+        return None
+    
+    return random.choice(low_rated_prompts)
+
+
+def get_difference_between_rates(user) -> tuple[int, int]:
+    rank = getattr(user, 'rank', None) or "B"
+
+    difference_by_rank = {
+        "B": (8, 2),
+        "S": (8, 3),
+        "G": (7, 4),
+        "R": (7, 5),
+        "D": (6, 5), 
+    }
+
+    return difference_by_rank.get(rank, (8, 2))
 
 
 def validate_user_prompt(user_prompt_text: str) -> tuple[bool, str | None]:
@@ -115,6 +138,62 @@ def handle_challenge_post(request) -> dict:
         'challenge_rate': challenge_prompt.rate,
         'improvement_hint': improvement_hint,
         'refined_prompt': refined_prompt,
+    })
+    
+    return context
+
+
+def handle_guess_the_best_prompt_get(request) -> dict:
+    context = {}
+    
+    min_rate, max_rate = get_difference_between_rates(request.user)
+    high_rated_prompt = get_random_high_rated_prompt(min_rate=min_rate)
+    low_rated_prompt = get_random_low_rated_prompt(max_rate=max_rate)
+    
+    if not high_rated_prompt or not low_rated_prompt:
+        context['error'] = "Недостатньо промптів для гри. Спробуйте пізніше!"
+        return context
+    
+    prompts = [high_rated_prompt, low_rated_prompt]
+    random.shuffle(prompts)
+    
+    request.session['best_prompt_id'] = high_rated_prompt.id
+    context['prompts'] = prompts
+    
+    return context
+
+
+def handle_guess_the_best_prompt_post(request) -> dict | None:
+    context = {}
+    
+    user_choice_id = request.POST.get("prompt_id")
+    best_prompt_id = request.session.get('best_prompt_id')
+
+    if not best_prompt_id or not user_choice_id:
+        return None
+
+    try:
+        best_prompt = Prompt.objects.get(id=best_prompt_id)
+        chosen_prompt = Prompt.objects.get(id=user_choice_id)
+    except Prompt.DoesNotExist:
+        return None
+
+    is_correct = int(user_choice_id) == best_prompt_id
+    result = "win" if is_correct else "loss"
+    message = "Правильно! Ви обрали найкращий промпт!" if is_correct else "Неправильно. Це був не кращий промпт!"
+
+    award_user_points(request.user, result)
+
+    if 'best_prompt_id' in request.session:
+        del request.session['best_prompt_id']
+
+    worst_prompt = chosen_prompt if not is_correct else None
+
+    context.update({
+        'result': result,
+        'message': message,
+        'best_prompt': best_prompt,
+        'worst_prompt': worst_prompt,
     })
     
     return context
