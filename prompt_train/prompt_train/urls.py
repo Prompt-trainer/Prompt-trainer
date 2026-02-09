@@ -15,13 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from decouple import config
 from django.contrib import admin
 from django.urls import path, include
 
-from prompt_gamified import views
+ADMIN_SITE_URL = config("ADMIN_SITE_URL", default="admin")
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(f"{ADMIN_SITE_URL}/", admin.site.urls),
     path("auth/", include("users.urls")),
     path("", include("prompt_gamified.urls")),
     path("chat/", include("chat.urls")),
