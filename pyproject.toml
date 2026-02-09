@@ -12,7 +12,6 @@ dependencies = [
     "django-filter>=25.2",
     "python-decouple>=3.8",
     "psycopg>=3.3.2",
-    "perplexityai>=0.26.0",
     "celery>=5.6.2",
     "redis>=7.1.0",
     "django-rest-framework (>=0.1.0,<0.2.0)",
@@ -23,4 +22,6 @@ dependencies = [
     "channels-redis>=4.0.0",
     "daphne>=4.0.0",
     "django-allauth>=65.14.0",
+    "openai>=2.16.0",
+    "whitenoise>=6.11.0",
 ]

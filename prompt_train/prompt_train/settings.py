@@ -32,11 +32,12 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",  # ВАЖЛИВО: має бути першим, перед staticfiles
+    "daphne",  
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
@@ -53,10 +54,12 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
 ]
 
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", 
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -138,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / 'staticfiles' 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
@@ -194,22 +198,26 @@ CHANNEL_LAYERS = {
 }
 CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
 
-SITE_ID = 1
-
 # ALL-AUTH
 
 ACCOUNT_UNIQUE_EMAIL = True
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# Вимикаємо перевірку email
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_ADAPTER = "prompt_gamified.adapters.CustomSocialAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
         "APP": {
             "client_id": config("GITHUB_OAUTH_CLIENT_ID"),
             "secret": config("GITHUB_OAUTH_CLIENT_SECRET"),
-            "key": ""
         },
         "SCOPE": ["user", "user:email"],
-        "VERIFIED_EMAIL": True
     }
 }
-# Додатковий запит якщо email не прийшов
-SOCIALACCOUNT_QUERY_EMAIL = True

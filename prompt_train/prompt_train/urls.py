@@ -18,11 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from prompt_gamified import views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("users.urls")),
     path("", include("prompt_gamified.urls")),
     path("chat/", include("chat.urls")),
     path("accounts/", include("allauth.urls")),
-    path("social/", include("allauth.socialaccount.urls")),
 ]

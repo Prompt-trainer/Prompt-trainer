@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Prompt trainer{% endblock %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-md-6">
+        <div class="card h-100 border-info">
+            <div class="card-body">
+                <h5 class="card-title">Тренування промптів</h5>
+                <p class="card-text">Введи промпт, отримаєш оцінку та підказку.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="promptInput" class="form-label">Твій промпт</label>
+                        <textarea
+                            class="form-control"
+                            id="promptInput"
+                            name="prompt"
+                            rows="5"
+                            placeholder="Наприклад: Напиши Django view для інтеграції з Perplexity API..."
+                        >{{ prompt_text|default_if_none:'' }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Оцінити промпт</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-4 mt-md-0">
+        <div class="card h-100 border-success">
+            <div class="card-body">
+                <h5 class="card-title">Результат аналізу</h5>
+
+                {% if prompt_rate %}
+                    <p><strong>Оцінка:</strong> {{ prompt_rate }} / 10</p>
+                    <p><strong>Підказка:</strong> {{ improvement_hint }}</p>
+                    <p><strong>Refined промпт:</strong></p>
+                    <pre class="bg-dark text-light p-2 rounded">{{ refined_prompt }}</pre>
+                {% else %}
+                    <p class="text-muted">Поки що немає результату. Введи промпт і натисни “Оцінити промпт”.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

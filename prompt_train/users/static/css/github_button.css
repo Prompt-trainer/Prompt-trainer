@@ -1,70 +1,48 @@
 .github-button {
+    display: flex;
     align-items: center;
-    background-color: white;
-    border: 1px solid #747775;
-    border-radius: 7px;
-    color: black;
-    font-family: 'Roboto', arial, sans-serif;
-    font-size: 15px;
-    height: 40px;
-    letter-spacing: 0.25px;
     justify-content: center;
-    display: inline-flex;
-    outline: none; /* Прибирає синю рамку при наведенні */
-    position: relative;
-    text-align: center;
+    gap: 8px;
+
     width: 100%;
-    max-width: 425px;
-}
+    height: 48px;                 /* фіксована висота, щоб SVG не стискався */
+    padding: 0 16px;
 
-.github-button,
-.github-button:hover,
-.github-button:active {
+    border-radius: 4px;
+    border: 1px solid #dadce0;
+    background-color: #ffffff;
+    color: #3c4043;
     text-decoration: none;
+
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
 }
 
-.github-button .github-button-icon {
-    height: 20px;
-    min-width: 20px;
-    margin-right: 10px;
-    width: 20px;
+.github-button:hover {
+    background-color: #f7f8f8;
 }
 
-.github-button .github-button-content-wrapper {
-    display: inline-flex;
+.github-button-content-wrapper {
+    display: flex;
     align-items: center;
     flex-direction: row-reverse; /* Вирівнюється справа */
-    flex-wrap: nowrap;
-    width: auto;
-    gap: 5px;
-    height: 100%;
-    position: relative;
+    justify-content: center;
+    gap: 8px;
 }
 
-.github-button .github-button-contents {
-    flex-grow: 1;
-    font-weight: 500;
-    overflow: hidden;
-    vertical-align: top;
+.github-button-icon svg {
+    width: 18px;
+    height: 18px;
+    display: block;
 }
 
-.github-button .github-button-state {
-    transition: opacity .218s;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    opacity: 0;
-    position: absolute;
+.github-button-contents {
+    white-space: nowrap;
 }
 
-
-.github-button:active .github-button-state {
-    background-color: #303030;
-    opacity: 12%;
-}
-
-.github-button:hover .github-button-state {
-    background-color: #303030;
-    opacity: 8%
+.github-button-state {
+    display: none;
 }

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Вибрати користувача{% endblock %}
+
+{% block content %}
+<style>
+    .theme-toggle {
+        display: none;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Почати чат</h4>
+                    <a href="{% url 'chat:conversations_list' %}" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Назад
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            class="form-control" 
+                            placeholder="🔍 Пошук користувачів на цій сторінці..."
+                        >
+                    </div>
+                    
+                    {% if users %}
+                        <div class="list-group mb-3" id="users-list">
+                            {% for user in users %}
+                                <a href="{% url 'chat:private_chat' user.id %}" 
+                                   class="list-group-item list-group-item-action user-item"
+                                   data-username="{{ user.nickname|lower }}">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" 
+                                                 style="width: 40px; height: 40px; font-size: 18px; font-weight: bold;">
+                                                {{ user.nickname|first|upper }}
+                                            </div>
+                                            <h5 class="mb-0">{{ user.nickname }}</h5>
+                                        </div>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        {% if users.has_other_pages %}
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                {% if users.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ users.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&laquo;</span>
+                                    </li>
+                                {% endif %}
+
+                                {% for i in users.paginator.page_range %}
+                                    {% if users.number == i %}
+                                        <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if users.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ users.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&raquo;</span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-people" style="font-size: 3rem; opacity: 0.3;"></i>
+                            <p class="text-muted mt-3">Немає доступних користувачів</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const userItems = document.querySelectorAll('.user-item');
+    
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        userItems.forEach(item => {
+            const username = item.getAttribute('data-username');
+            if (username.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
