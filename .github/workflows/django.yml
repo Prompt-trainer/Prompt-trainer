@@ -65,8 +65,8 @@ jobs:
         EMAIL_HOST_USER=test@example.com
         EMAIL_HOST_PASSWORD=test-password
         CHAT_ENCRYPTION_KEY=test-encryption-key-32-characters
-        GITHUB_OAUTH_CLIENT_ID=test-client-id
-        GITHUB_OAUTH_CLIENT_SECRET=test-client-secret
+        GITHUB_OAUTH_CLIENT_ID=${{ secrets.G_OAUTH_CLIENT_ID }}
+        GITHUB_OAUTH_CLIENT_SECRET=${{ secrets.G_OAUTH_CLIENT_ID }}
         EOF
 
     - name: Run migrations
