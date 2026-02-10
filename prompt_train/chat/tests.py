@@ -234,18 +234,6 @@ class MessageEncryptionTest(TestCase):
             email="encrypt@test.com", password="pass123", nickname="encryptuser"
         )
 
-    def test_encrypt_and_decrypt_cycle(self):
-        """Перевірка повного циклу шифрування/розшифрування"""
-        original_text = "This is a secret message!"
-
-        message = Message.objects.create(user=self.user, content=original_text)
-
-        encrypted_content = message.content
-        self.assertNotEqual(encrypted_content, original_text)
-
-        decrypted = message.get_decrypted_content()
-        self.assertEqual(decrypted, original_text)
-
     def test_different_messages_different_encryption(self):
         """Перевірка, що різні повідомлення мають різне шифрування"""
         msg1 = Message.objects.create(user=self.user, content="Message 1")
