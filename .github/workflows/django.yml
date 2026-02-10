@@ -1,0 +1,96 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main, feat/tests]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_prompt_trainer
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Create .env file
+      run: |
+        cd prompt_train
+        cat > .env << EOF
+        SECRET_KEY=test-secret-key-for-ci-cd-testing-only
+        DEBUG=True
+        DB_NAME=test_prompt_trainer
+        DB_USER=postgres
+        DB_PASSWORD=postgres
+        DB_HOST=localhost
+        DB_PORT=5432
+        REDIS_URL=redis://localhost:6379/0
+        OPENAI_API_KEY=sk-test-key
+        ALLOWED_HOSTS=localhost,127.0.0.1
+        EOF
+
+    - name: Run migrations
+      run: |
+        cd prompt_train
+        uv run python manage.py migrate --noinput
+
+    - name: Run tests
+      run: |
+        cd prompt_train
+        uv run python manage.py test
+
+    - name: Run coverage (optional)
+      if: success()
+      run: |
+        uv add --dev coverage
+        cd prompt_train
+        uv run coverage run --source='.' manage.py test
+        uv run coverage report
+        uv run coverage xml
+
+    - name: Upload coverage to Codecov (optional)
+      if: success()
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./prompt_train/coverage.xml
+        fail_ci_if_error: false
