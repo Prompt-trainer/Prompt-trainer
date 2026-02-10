@@ -67,6 +67,8 @@ jobs:
         CHAT_ENCRYPTION_KEY=test-encryption-key-32-characters
         GITHUB_OAUTH_CLIENT_ID=${{ secrets.G_OAUTH_CLIENT_ID }}
         GITHUB_OAUTH_CLIENT_SECRET=${{ secrets.G_OAUTH_CLIENT_SECRET}}
+        OAUTH_CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}
+        OAUTH_CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}
         EOF
 
     - name: Run migrations
