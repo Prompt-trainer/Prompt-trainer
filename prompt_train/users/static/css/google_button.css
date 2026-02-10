@@ -1,4 +1,4 @@
-.gsi-material-button {
+.auth-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,27 +21,28 @@
     cursor: pointer;
 }
 
-.gsi-material-button:hover {
+.auth-button:hover {
     background-color: #f7f8f8;
 }
 
-.gsi-material-button-content-wrapper {
+.auth-button-content-wrapper {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse; /* Вирівнюється справа */
     justify-content: center;
     gap: 8px;
 }
 
-.gsi-material-button-icon svg {
+.auth-button-icon svg {
     width: 18px;
     height: 18px;
     display: block;
 }
 
-.gsi-material-button-contents {
+.auth-button-contents {
     white-space: nowrap;
 }
 
-.gsi-material-button-state {
+.auth-button-state {
     display: none;
 }

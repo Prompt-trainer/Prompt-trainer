@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'prompt_train.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prompt_train.settings")
 
 django.setup()
 
@@ -19,11 +19,9 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from chat.routing import websocket_urlpatterns
 
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
-        URLRouter(
-            websocket_urlpatterns
-        )
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+    }
+)

@@ -7,7 +7,14 @@ from django.db import transaction
 from django.core.paginator import Paginator
 import random
 from django.db import transaction
-from .utils import handle_challenge_get, handle_challenge_post, handle_guess_the_best_prompt_get, handle_guess_the_best_prompt_post,  handle_prompt_trainer_post
+from .utils import (
+    handle_challenge_get,
+    handle_challenge_post,
+    handle_guess_the_best_prompt_get,
+    handle_guess_the_best_prompt_post,
+    handle_prompt_trainer_post,
+)
+
 
 def index_view(request):
     return render(request, "prompt_gamified/index.html")
@@ -20,7 +27,7 @@ def home_view(request):
 
 @login_required
 def good_prompts_view(request):
-    prompts = Prompt.objects.all().order_by('-rate')[:100]
+    prompts = Prompt.objects.all().order_by("-rate")[:100]
     return render(request, "prompt_gamified/good_prompts.html", {"prompts": prompts})
 
 
@@ -40,10 +47,10 @@ def prompt_trainer_view(request):
 
 @login_required
 def leaderboard_view(request):
-    users_list = CustomUser.objects.filter(is_active=True).order_by('-exp')
+    users_list = CustomUser.objects.filter(is_active=True).order_by("-exp")
     paginator = Paginator(users_list, 10)
 
-    page_number = request.GET.get('page', 1)
+    page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
     start_rank = (page_obj.number - 1) * paginator.per_page
@@ -51,10 +58,11 @@ def leaderboard_view(request):
         user.rank_position = start_rank + idx
 
     context = {
-        'page_obj': page_obj,
-        'total_users': paginator.count,
+        "page_obj": page_obj,
+        "total_users": paginator.count,
     }
     return render(request, "prompt_gamified/leader_board.html", context)
+
 
 @login_required
 def challenge_view(request):
@@ -63,7 +71,7 @@ def challenge_view(request):
     else:
         context = handle_challenge_post(request)
         if context is None:
-            return redirect('prompt_gamified:challenge')
+            return redirect("prompt_gamified:challenge")
 
     return render(request, "prompt_gamified/challenge.html", context)
 
@@ -75,6 +83,6 @@ def guess_the_best_prompt_view(request):
     else:
         context = handle_guess_the_best_prompt_post(request)
         if context is None:
-            return redirect('prompt_gamified:guess_the_best_prompt')
-        
+            return redirect("prompt_gamified:guess_the_best_prompt")
+
     return render(request, "prompt_gamified/guess_the_best_prompt.html", context)

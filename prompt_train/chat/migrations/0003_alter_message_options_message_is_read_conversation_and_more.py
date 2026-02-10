@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("chat", "0002_alter_message_options_message_edited_at_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

@@ -2,6 +2,7 @@ from openai import OpenAI
 import re
 from decouple import config
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,6 +27,7 @@ Adhere to the following strict guidelines for every response:
    - If you cannot evaluate, return [5.0]/10 (Could not parse the score.)
    - If you cannot optimize, return Refined: "[repeat the input prompt, unchanged]"."""
 
+
 def get_client() -> OpenAI:
     api_key = config("PERPLEXITY_API_KEY")
     if not api_key:
@@ -34,14 +36,17 @@ def get_client() -> OpenAI:
         api_key=api_key,
         base_url="https://api.perplexity.ai",
     )
-    
+
+
 def parse_score_and_refined(response_text: str) -> tuple[float, str, str]:
     logger.debug("Perplexity response: %s", response_text)
 
     lines = response_text.strip().splitlines()
     first_line = lines[0] if lines else ""
 
-    score_match = re.search(r"\[(\d+(?:\.\d+)?)\]/10\s*\((.*?)\)", first_line, re.DOTALL)
+    score_match = re.search(
+        r"\[(\d+(?:\.\d+)?)\]/10\s*\((.*?)\)", first_line, re.DOTALL
+    )
     if not score_match:
         return 5.0, "Не вдалося розібрати оцінку.", response_text[:500]
 
@@ -61,7 +66,7 @@ def parse_score_and_refined(response_text: str) -> tuple[float, str, str]:
         if m:
             refined_text = m.group(1).strip()
             break
-        
+
     if not refined_text:
         refined_text = "\n".join(lines[1:]).strip()
 
