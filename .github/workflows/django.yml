@@ -2,7 +2,7 @@ name: Django CI
 
 on:
   push:
-    branches: [ main, feat/tests]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
 
@@ -50,23 +50,23 @@ jobs:
         version: "latest"
 
     - name: Install dependencies
-      run: |
-        uv sync
+      run: uv sync
 
     - name: Create .env file
       run: |
         cd prompt_train
         cat > .env << EOF
         SECRET_KEY=test-secret-key-for-ci-cd-testing-only
-        DEBUG=True
-        DB_NAME=test_prompt_trainer
-        DB_USER=postgres
-        DB_PASSWORD=postgres
-        DB_HOST=localhost
-        DB_PORT=5432
-        REDIS_URL=redis://localhost:6379/0
-        OPENAI_API_KEY=sk-test-key
-        ALLOWED_HOSTS=localhost,127.0.0.1
+        PG_DB=test_prompt_trainer
+        PG_USER=postgres
+        PG_PASSWORD=postgres
+        PG_HOST=localhost
+        PG_PORT=5432
+        EMAIL_HOST_USER=test@example.com
+        EMAIL_HOST_PASSWORD=test-password
+        CHAT_ENCRYPTION_KEY=test-encryption-key-32-characters
+        GITHUB_OAUTH_CLIENT_ID=test-client-id
+        GITHUB_OAUTH_CLIENT_SECRET=test-client-secret
         EOF
 
     - name: Run migrations
@@ -78,19 +78,3 @@ jobs:
       run: |
         cd prompt_train
         uv run python manage.py test
-
-    - name: Run coverage (optional)
-      if: success()
-      run: |
-        uv add --dev coverage
-        cd prompt_train
-        uv run coverage run --source='.' manage.py test
-        uv run coverage report
-        uv run coverage xml
-
-    - name: Upload coverage to Codecov (optional)
-      if: success()
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./prompt_train/coverage.xml
-        fail_ci_if_error: false
