@@ -24,4 +24,5 @@ dependencies = [
     "django-allauth>=65.14.0",
     "openai>=2.16.0",
     "whitenoise>=6.11.0",
+    "ruff>=0.15.0",
 ]

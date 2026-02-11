@@ -13,5 +13,5 @@ urlpatterns = [
     path("login/", LoginView.as_view(template_name="users/login.html"), name="login"),
     path("logout/", LogoutView.as_view(next_page="auth:login"), name="logout"),
     path("google/login/", GoogleLoginView.as_view(), name="google_login"),
-    path("google/callback/", GoogleCallbackView.as_view(), name="google_callback")
+    path("google/callback/", GoogleCallbackView.as_view(), name="google_callback"),
 ]

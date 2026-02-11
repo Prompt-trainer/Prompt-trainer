@@ -26,13 +26,13 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",  
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,10 +43,10 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "django_filters",
-    "channels", 
+    "channels",
     "prompt_gamified",
     "users",
-    "chat", 
+    "chat",
     "sslserver",
     "allauth",
     "allauth.account",
@@ -59,14 +59,19 @@ SITE_ID = 1
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allauth.account.middleware.AccountMiddleware"
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -78,7 +83,7 @@ ROOT_URLCONF = "prompt_train.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -141,8 +146,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -208,7 +213,7 @@ ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # Вимикаємо перевірку email
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_ADAPTER = "prompt_gamified.adapters.CustomSocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
@@ -223,6 +228,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Logging configuration
+
 
 LOGGING = {
     "version": 1,
@@ -251,3 +257,4 @@ LOGGING = {
         },
     },
 }
+

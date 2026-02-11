@@ -17,3 +17,6 @@ https:
 	celery -A prompt_train.celery worker -l info
 static:
 	python manage.py collectstatic
+
+tests:
+	python manage.py test

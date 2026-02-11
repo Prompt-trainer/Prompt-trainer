@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0003_remove_customuser_poins_customuser_points_and_more"),
     ]
