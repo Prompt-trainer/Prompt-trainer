@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
-    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
@@ -55,7 +54,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
 ]
 
-SITE_ID = 1
 SITE_ID = 1
 
 MIDDLEWARE = [
