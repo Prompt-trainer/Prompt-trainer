@@ -1,5 +1,7 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
+from random import randint
+import random
 
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -25,7 +27,7 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         # Якщо nickname зайнятий, додається число в кінець
         while CustomUser.objects.filter(nickname=nickname).exists():
             nickname = f"{base_nickname}{counter}"
-            counter += 1
+            counter += random.randit(1, 9)
 
         user.nickname = nickname
         user.is_active = True

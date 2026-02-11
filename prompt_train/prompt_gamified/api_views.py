@@ -20,7 +20,6 @@ class GoogleLoginView(View):
 class GoogleCallbackView(View):
     def get(self, request):
         token = oauth.google.authorize_access_token(request)
-        # Отримання даних користувача
         response = oauth.google.get(
             "https://openidconnect.googleapis.com/v1/userinfo", token=token
         )
@@ -28,7 +27,7 @@ class GoogleCallbackView(View):
 
         email = user_info["email"]
         nickname = user_info.get("nickname", "")
-        sub = user_info.get("sub")  # Зовнішній ідентифікатор
+        sub = user_info.get("sub")
 
         user, created = CustomUser.objects.get_or_create(
             email=email, defaults={"nickname": nickname}
@@ -36,18 +35,18 @@ class GoogleCallbackView(View):
         user.is_active = True
         user.save()
 
+        user.backend = "django.contrib.auth.backends.ModelBackend"
         login(request, user)
+        
         response = redirect("prompt_gamified:home_page")
         response.set_cookie(
             key="google_registration_success",
             value=1,
             max_age=60 * 60 * 24,
             httponly=True,
-            # Cookie передається лише в безпечних навігаційних запитах
             samesite="Lax",
             secure=not settings.DEBUG,
         )
 
         messages.success(request, "Реєстрація успішна!")
-
         return response
