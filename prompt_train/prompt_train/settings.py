@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -67,6 +69,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -224,6 +231,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Logging configuration
 
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -251,3 +259,4 @@ LOGGING = {
         },
     },
 }
+

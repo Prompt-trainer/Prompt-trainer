@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model, login
 from django.core.paginator import Paginator
 from users.models import CustomUser
 from .models import Prompt
 from django.db import transaction
-from django.core.paginator import Paginator
 import random
 from django.db import transaction
 from .utils import (
@@ -18,7 +18,6 @@ from .utils import (
 
 def index_view(request):
     return render(request, "prompt_gamified/index.html")
-
 
 @login_required
 def home_view(request):
@@ -64,6 +63,7 @@ def leaderboard_view(request):
     return render(request, "prompt_gamified/leader_board.html", context)
 
 
+
 @login_required
 def challenge_view(request):
     if request.method == "GET":
@@ -86,3 +86,4 @@ def guess_the_best_prompt_view(request):
             return redirect("prompt_gamified:guess_the_best_prompt")
 
     return render(request, "prompt_gamified/guess_the_best_prompt.html", context)
+
