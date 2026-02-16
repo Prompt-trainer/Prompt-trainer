@@ -39,19 +39,11 @@
                                 <span class="gsi-material-button-contents">Зареєструватися з Google</span>
                                 <span style="display: none;">Зареєструватися з Google</span>
                             </div>
-                        </a>
-
-                        <a class="auth-button my-1" href="{% provider_login_url 'github' %}">
-                            <div class="auth-button-state"></div>
-                            <div class="auth-button-content-wrapper">
-                                <div class="auth-button-icon">
-                                    <i class="bi bi-github"></i>
-                                </div>
-                                <span class="auth-button-contents">Зареєструватися з GitHub</span>
-                                <span style="display: none;">Зареєструватися з GitHub</span>
-                            </div>
-                        </a>
-                    </form>
+                            <span class="auth-button-contents">Зареєструватися з GitHub</span>
+                            <span style="display: none;">Зареєструватися з GitHub</span>
+                        </div>
+                    </a>
+                </form>
 
                     <p class="text-center mt-4">
                         Вже є аккаунт? <a href="{% url 'auth:login' %}" class="text-decoration-none">Увійти</a>
