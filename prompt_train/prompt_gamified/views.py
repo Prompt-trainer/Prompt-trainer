@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, login
 from django.core.paginator import Paginator
 from users.models import CustomUser
-from .models import Prompt
+from .models import Prompt, Cosmetic
 from django.db import transaction
 import random
 from django.db import transaction
@@ -26,6 +26,7 @@ def home_view(request):
 
 @login_required
 def good_prompts_view(request):
+    # Показуємо перші 100 промптів, починаючи з найкращого
     prompts = Prompt.objects.all().order_by("-rate")[:100]
     return render(request, "prompt_gamified/good_prompts.html", {"prompts": prompts})
 
@@ -47,13 +48,20 @@ def prompt_trainer_view(request):
 @login_required
 def leaderboard_view(request):
     users_list = CustomUser.objects.filter(is_active=True).order_by("-exp")
+    # 10 - максимальна кількість користувачів на сторінці
     paginator = Paginator(users_list, 10)
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
+    # Задаємо позицію першого користувача на сторінці
     start_rank = (page_obj.number - 1) * paginator.per_page
+
+    # Перебираємо позицію користувача на сторінці та починаємо з 1
     for idx, user in enumerate(page_obj.object_list, start=1):
+        # Визначаємо глобальну позицію користувача.
+        # Наприклад, на сторінці 5 користувач із позицією 4 буде
+        # (5-1) * 10 + 4 = 44-м у глобальному рейтингу
         user.rank_position = start_rank + idx
 
     context = {
@@ -87,3 +95,7 @@ def guess_the_best_prompt_view(request):
 
     return render(request, "prompt_gamified/guess_the_best_prompt.html", context)
 
+
+def store_view(request):
+    cosmetics = Cosmetic.objects.all()
+    return render(request, "prompt_gamified/store.html", {"cosmetics": cosmetics})

@@ -20,4 +20,5 @@ urlpatterns = [
         views.guess_the_best_prompt_view,
         name="guess_the_best_prompt",
     ),
+    path("store/", views.store_view , name="store")
 ]

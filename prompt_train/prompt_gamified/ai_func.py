@@ -21,11 +21,11 @@ Adhere to the following strict guidelines for every response:
     Refined: "[optimized prompt, within 500 characters]"
 
 5. Mandatory rules:
-   - The first line must always be in the format [X]/10 (text).
-   - The second line must always start with "Refined: \"".
-   - No additional explanations, headings, or lists outside this format.
-   - If you cannot evaluate, return [5.0]/10 (Could not parse the score.)
-   - If you cannot optimize, return Refined: "[repeat the input prompt, unchanged]"."""
+    - The first line must always be in the format [X]/10 (text).
+    - The second line must always start with "Refined: \"".
+    - No additional explanations, headings, or lists outside this format.
+    - If you cannot evaluate, return [5.0]/10 (Could not parse the score.)
+    - If you cannot optimize, return Refined: "[repeat the input prompt, unchanged]"."""
 
 
 def get_client() -> OpenAI:
@@ -39,34 +39,44 @@ def get_client() -> OpenAI:
 
 
 def parse_score_and_refined(response_text: str) -> tuple[float, str, str]:
+    # Вставляє response_text замість %s в повідомленні логування
     logger.debug("Perplexity response: %s", response_text)
 
+    # .splitlines() розбиває response_text на список рядків
     lines = response_text.strip().splitlines()
     first_line = lines[0] if lines else ""
 
+    # Розбиває рядок типу [6.5]/10 (Непогано, але є зауваження) на
+    # match.group(1) зі значенням '6.5' 
+    # та match.group(2) зі значенням 'Непогано, але є зауваження'
     score_match = re.search(
         r"\[(\d+(?:\.\d+)?)\]/10\s*\((.*?)\)", first_line, re.DOTALL
     )
     if not score_match:
         return 5.0, "Не вдалося розібрати оцінку.", response_text[:500]
 
+    # Розпакування кортежу score_match в дві змінні
     score_str, advice = score_match.groups()
     try:
+        # Встановлення правильного діапазону від 1 до 10
         score = max(1.0, min(10.0, float(score_str)))
     except ValueError:
         return 5.0, "Не вдалося розібрати оцінку.", response_text[:500]
     refined_text = ""
     for line in lines[1:]:
         line = line.strip()
+        # Пошук ключових слів
         m = re.search(
             r"^(?:Refined|Optimized|Оптимізований|Refined prompt|Optimized prompt):\s*\"?([^\"]+)",
             line,
             re.IGNORECASE,
         )
+        # У разі успішного знаходження записує в змінну текст із ключовим словом
         if m:
             refined_text = m.group(1).strip()
             break
 
+    # Якщо ключових слів не знайдено, записує в змінну весь текст
     if not refined_text:
         refined_text = "\n".join(lines[1:]).strip()
 

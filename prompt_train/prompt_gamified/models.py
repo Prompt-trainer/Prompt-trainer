@@ -15,6 +15,15 @@ class Prompt(models.Model):
 
     def __str__(self):
         return f"{self.user} - '{self.prompt_text}'."
+    
 
+class Cosmetic(models.Model):
+    name = models.CharField(max_length=50)
+    price = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(1000)],
+        default=1,)
+    svg_code = models.TextField(default="")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
 
-# Має бути модель для гри з оцінюванням промптів, які можна задати через адмінку.
+    def __str__(self):
+        return f"{self.name} - {self.price}"

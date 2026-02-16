@@ -205,16 +205,30 @@ CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
 
 # ALL-AUTH
 
+# Робимо email унікальним
 ACCOUNT_UNIQUE_EMAIL = True
 
+# Вказуємо, що у нашій моделі CustomUser відсутнє поле username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# Робимо поле username необов'язковим, оскільки
+# його немає в моделі CustomUser
 ACCOUNT_USERNAME_REQUIRED = False
+
+# Робимо email необов'язковим, оскільки його задає GitHubAPI
 ACCOUNT_EMAIL_REQUIRED = False
+
+# Задаємо спосіб автентифікації - email
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
-# Вимикаємо перевірку email
-SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# Вимикаємо перевірку email, користувач одразу активний
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Задаємо кастомний адаптер, який перевизначає поведінку функцій
+# класу DefaultSocialAccountAdapter
 SOCIALACCOUNT_ADAPTER = "prompt_gamified.adapters.CustomSocialAccountAdapter"
+
+# Автоматично створюємо користувача без показу форми
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -223,6 +237,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": config("GITHUB_OAUTH_CLIENT_ID"),
             "secret": config("GITHUB_OAUTH_CLIENT_SECRET"),
         },
+        # Вказує, які дані отримуються від GitHub
+        # 1. "user" - username
+        # 2. user:email" - email користувача
         "SCOPE": ["user", "user:email"],
     },
 }

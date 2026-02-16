@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Крамниця
+{% endblock %}
+
+{% block header %}
+<header class="py-4 border-bottom">
+    <div class="container text-center">
+        <h1 class="display-6">Крамниця елементів оформлення</h1>
+        <p class="lead">Персоналізуй профіль під себе</p>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        {% for cosm in cosmetics %}
+            <div class="col-md-3 col-sm-6 fade-in">
+                <div class="card border-primary w-100">
+                    <img>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cosm.name }}</h5>
+                        <p class="card-subtitle">{{ cosm.price }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

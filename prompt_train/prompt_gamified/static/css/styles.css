@@ -28,3 +28,32 @@
 #mainNav.navbar-shrink .nav-link {
     color: #fff !important;
 }
+
+.profile-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    align-self: center;
+}
+
+.profile-icon {
+    font-size: 120px;
+    line-height: 1;
+    display: block;
+    z-index: 1;
+    position: relative;
+}
+
+.cosmetic-frame {
+    position: absolute;
+    top: 0;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 2;
+}

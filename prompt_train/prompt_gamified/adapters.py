@@ -27,7 +27,7 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         # Якщо nickname зайнятий, додається число в кінець
         while CustomUser.objects.filter(nickname=nickname).exists():
             nickname = f"{base_nickname}{counter}"
-            counter += random.randit(1, 9)
+            counter += random.randint(1, 9)
 
         user.nickname = nickname
         user.is_active = True
