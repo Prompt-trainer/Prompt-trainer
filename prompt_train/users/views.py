@@ -19,7 +19,6 @@ def register_view(request):
             user.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
-            send_registration_email_task.delay(user.id)
 
             response = redirect("prompt_gamified:home_page")
             response.set_cookie(
