@@ -40,7 +40,7 @@
 
 
                 <p class="card-text">Твої очки: {{ user.points }} <i class="bi bi-hurricane"></i></p>
-                <a href="#" class="btn btn-outline-primary my-2">Переглянути профіль</a>
+                <a href="{% url 'auth:profile' %}" class="btn btn-outline-primary my-2">Переглянути профіль</a>
             </div>
         </div>
     </div>
