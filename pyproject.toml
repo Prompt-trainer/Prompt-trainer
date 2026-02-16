@@ -25,4 +25,5 @@ dependencies = [
     "openai>=2.16.0",
     "whitenoise>=6.11.0",
     "ruff>=0.15.0",
+    "pillow>=12.1.1",
 ]

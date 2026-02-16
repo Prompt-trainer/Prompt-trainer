@@ -6,7 +6,6 @@ from users.models import CustomUser
 from .models import Prompt, Cosmetic
 from django.db import transaction
 import random
-from django.db import transaction
 from .utils import (
     handle_challenge_get,
     handle_challenge_post,
@@ -69,7 +68,6 @@ def leaderboard_view(request):
         "total_users": paginator.count,
     }
     return render(request, "prompt_gamified/leader_board.html", context)
-
 
 
 @login_required
