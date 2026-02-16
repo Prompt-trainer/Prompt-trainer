@@ -1,0 +1,29 @@
+FROM python:3.13-slim
+
+# Встановлюємо системні залежності
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Встановлюємо uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Налаштування Python
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Створюємо робочу директорію
+WORKDIR /app
+
+# Копіюємо файли залежностей
+COPY pyproject.toml uv.lock ./
+
+# Встановлюємо залежності (включаючи dev)
+RUN uv sync --frozen
+
+# Відкриваємо порт
+EXPOSE 8000
+
+# Команда за замовчуванням (можна перевизначити в docker-compose)
+CMD ["uv", "run", "python", "prompt_train/manage.py", "runserver", "0.0.0.0:8000"]

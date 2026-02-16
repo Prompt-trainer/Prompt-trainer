@@ -63,7 +63,6 @@ def leaderboard_view(request):
     return render(request, "prompt_gamified/leader_board.html", context)
 
 
-
 @login_required
 def challenge_view(request):
     if request.method == "GET":
@@ -86,4 +85,3 @@ def guess_the_best_prompt_view(request):
             return redirect("prompt_gamified:guess_the_best_prompt")
 
     return render(request, "prompt_gamified/guess_the_best_prompt.html", context)
-

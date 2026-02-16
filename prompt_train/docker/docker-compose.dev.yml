@@ -1,0 +1,85 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: prompt_trainer_dev_db
+    restart: unless-stopped
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${PG_DB:-prompt_trainer_db}
+      POSTGRES_USER: ${PG_USER:-postgres}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-postgres}
+    networks:
+      - dev_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-postgres}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    container_name: prompt_trainer_dev_redis
+    restart: unless-stopped
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - dev_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: ../..
+      dockerfile: ./prompt_train/docker/Dockerfile.dev
+    container_name: prompt_trainer_dev_web
+    restart: unless-stopped
+    command: >
+      sh -c "cd prompt_train &&
+             uv run python manage.py migrate &&
+             uv run python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../prompt_train:/app/prompt_train:cached
+      - uv_cache:/root/.cache/uv
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - dev_network
+    stdin_open: true
+    tty: true
+
+  celery_worker:
+    build:
+      context: ../..
+      dockerfile: ./prompt_train/docker/Dockerfile.dev
+    container_name: prompt_trainer_dev_celery
+    restart: unless-stopped
+    command: sh -c "cd prompt_train && uv run celery -A prompt_train worker -l info"
+    volumes:
+      - ../../prompt_train:/app/prompt_train:cached
+      - uv_cache:/root/.cache/uv
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - dev_network
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+  uv_cache:
+
+networks:
+  dev_network:
