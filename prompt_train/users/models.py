@@ -17,8 +17,8 @@ def get_profile_picture_storage():
     if settings.USE_S3:
         from .storage_backends import MediaStorage
         return MediaStorage()
-    return None  # Використовувати default storage
-
+    from django.core.files.storage import default_storage
+    return default_storage
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -44,7 +44,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         upload_to='profile_pictures/',
         blank=True,
         null=True,
-        storage=get_profile_picture_storage,
+        storage=get_profile_picture_storage(),
         validators=[validate_image_size],
         help_text='Максимальний розмір: 5MB. Формати: JPG, PNG, GIF'
     )
