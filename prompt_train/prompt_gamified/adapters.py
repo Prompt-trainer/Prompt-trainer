@@ -1,10 +1,23 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.account.adapter import DefaultAccountAdapter
-from random import randint
+from allauth.account.models import EmailAddress
+from django.contrib import messages
 import random
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
+    def pre_social_login(self, request, sociallogin):
+        email = sociallogin.account.extra_data.get("email")
+        if email:
+            try:
+                user = User.objects.get(email=email)
+                sociallogin.connect(request, user)
+            except User.DoesNotExist:
+                pass
+        return super().pre_social_login(request, sociallogin)
+
     def is_auto_signup_allowed(self, request, sociallogin):
         """Дозволяє автоматичну автентифікацію без створення форми."""
         return True
