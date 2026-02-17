@@ -17,7 +17,8 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         github_username = sociallogin.account.extra_data.get("login")
 
         # Створення nickname по логіну, інакше бере з email частину перед '@'
-        base_nickname = github_username or user.email.split("@")[0]
+        base_nickname = github_username or (
+            user.email.split("@")[0] if user.email else "user")
 
         from users.models import CustomUser
 
@@ -33,3 +34,29 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         user.is_active = True
 
         return user
+    
+    def pre_social_login(self, request, sociallogin):
+        if sociallogin.is_existing:
+            return
+        
+        from allauth.socialaccount.models import SocialAccount
+        from .models import CustomUser
+        try:
+            existing = SocialAccount.objects.get(
+                provider=sociallogin.account.provider,
+                uid=sociallogin.account.uid
+            )
+            sociallogin.connect(request, existing.user)
+        except SocialAccount.DoesNotExist:
+            pass
+
+        email = sociallogin.account.extra_data.get("email") or (
+            sociallogin.email_addresses[0].email
+            if sociallogin.email_addresses else None
+        )
+        if email:
+            try:
+                existing_user = CustomUser.objects.get(email=email)
+                sociallogin.connect(request, existing_user)
+            except CustomUser.DoesNotExist:
+                pass

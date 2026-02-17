@@ -175,7 +175,6 @@ CELERY_TIMEZONE = "Europe/Kiev"
 
 # Email конфігурація
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
@@ -211,18 +210,27 @@ ACCOUNT_UNIQUE_EMAIL = True
 # Вказуємо, що у нашій моделі CustomUser відсутнє поле username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
-# Робимо поле username необов'язковим, оскільки
-# його немає в моделі CustomUser
-ACCOUNT_USERNAME_REQUIRED = False
-
-# Робимо email необов'язковим, оскільки його задає GitHubAPI
-ACCOUNT_EMAIL_REQUIRED = False
-
 # Задаємо спосіб автентифікації - email
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = {'email'}
 
-# Вимикаємо перевірку email, користувач одразу активний
+# Робимо email обов'язковим щоб запитувати його при відсутності
+# надавання email'у GitHubAPI. Пароль також є обов'язковим.
+# Поля username немає через його відсутність у базі даних
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+# Вимикаємо перевірку email при звичайній реєстрації.
+# Потрібно для підключення GitHub до існуючого акаунту
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Вимикаємо перевірку email при реєстрації через GitHub,
+# користувач одразу активний
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Вимагаємо email при реєстрації через GitHub
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+# Дозволяємо логін без перевірки email
+SOCIALACCOUNT_LOGIN_ON_EMAIL_VERIFICATION = True
 
 # Задаємо кастомний адаптер, який перевизначає поведінку функцій
 # класу DefaultSocialAccountAdapter
