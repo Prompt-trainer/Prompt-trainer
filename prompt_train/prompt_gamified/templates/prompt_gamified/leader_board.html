@@ -179,6 +179,20 @@
         margin-right: 0.5rem;
     }
 
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4a5568;
+        margin-right: 0.75rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+
     @media (max-width: 768px) {
         .leaderboard-header h1 {
             font-size: 1.8rem;
@@ -200,6 +214,11 @@
         .stat-value {
             font-size: 1rem;
         }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+        }
     }
 </style>
 {% endblock %}
@@ -220,7 +239,7 @@
         <thead>
             <tr>
                 <th><i class="bi bi-hash"></i> Місце</th>
-                <th><i class="bi bi-person-circle"></i> Нікнейм</th>
+                <th><i class="bi bi-person-circle"></i> Гравець</th>
                 <th><i class="bi bi-award-fill"></i> Ранг</th>
                 <th><i class="bi bi-star-fill"></i> Досвід</th>
                 <th><i class="bi bi-coin"></i> Поінти</th>
@@ -240,7 +259,16 @@
                         {{ user.rank_position }}
                     {% endif %}
                 </td>
-                <td class="user-nickname">{{ user.nickname }}</td>
+                <td>
+                    <div class="user-info">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" class="user-avatar">
+                        {% else %}
+                            <i class="bi bi-person-circle user-avatar" style="font-size: 40px; border: none;"></i>
+                        {% endif %}
+                        <span class="user-nickname">{{ user.nickname }}</span>
+                    </div>
+                </td>
                 <td>
                     {% if user.rank == 'B' %}
                         <span class="rank-badge rank-bronze">Bronze</span>

@@ -1,13 +1,30 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.conf import settings
 
+
+def validate_image_size(image):
+    """Валідація розміру зображення (максимум 5MB)"""
+    max_size_mb = 5
+    if image.size > max_size_mb * 1024 * 1024:
+        raise ValidationError(f'Розмір файлу не може перевищувати {max_size_mb}MB')
+
+
+# Функція для визначення storage
+def get_profile_picture_storage():
+    if settings.USE_S3:
+        from .storage_backends import MediaStorage
+        return MediaStorage()
+    from django.core.files.storage import default_storage
+    return default_storage
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)  # Хешування паролю
+        user.set_password(password)
         user.save()
         return user
 
@@ -23,6 +40,14 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=80, unique=True)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+        storage=get_profile_picture_storage(),
+        validators=[validate_image_size],
+        help_text='Максимальний розмір: 5MB. Формати: JPG, PNG, GIF'
+    )
     rank = models.CharField(
         max_length=20,
         choices=[
@@ -34,14 +59,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ],
         default="B",
     )
-    points = models.IntegerField(default=0)  # валюта на платформі
+    points = models.IntegerField(default=0)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     exp = models.IntegerField(default=0)
-    # Поле is_superuser відсутнє через наявність класу PermissionsMixin
 
     USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"  # Для скидання паролю
+    EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["nickname"]
     objects = CustomUserManager()
 
