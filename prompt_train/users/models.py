@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -10,6 +11,12 @@ def validate_image_size(image):
     max_size_mb = 5
     if image.size > max_size_mb * 1024 * 1024:
         raise ValidationError(f'Розмір файлу не може перевищувати {max_size_mb}MB')
+
+
+# Функція для визначення шляху зображення профіля
+def get_profile_picture_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    return f'profile_pictures/user_{instance.id}{ext}'
 
 
 # Функція для визначення storage
@@ -41,7 +48,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=80, unique=True)
     profile_picture = models.ImageField(
-        upload_to='profile_pictures/',
+        upload_to=get_profile_picture_path,
         blank=True,
         null=True,
         storage=get_profile_picture_storage(),
@@ -73,6 +80,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.nickname} - {self.email}"
 
     def save(self, *args, **kwargs):
+        # Видаляємо старе зображення, якщо воно було замінене
+        if self.pk:
+            try:
+                old_instance = CustomUser.objects.get(pk=self.pk)
+                if old_instance.profile_picture and old_instance.profile_picture != self.profile_picture:
+                    old_instance.profile_picture.delete(save=False)
+            except CustomUser.DoesNotExist:
+                pass
+        
+        # Оновлення рангу на основі досвіду
         new_rank = self.rank
         if self.exp > 18:
             new_rank = "D"
