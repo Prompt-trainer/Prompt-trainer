@@ -26,12 +26,21 @@
     <div class="col-md-4 my-4">
         <div class="card h-100 border-primary text-center">
             <div class="card-body d-flex flex-column justify-content-center">
-                <div class="profile-wrapper">
-                    <i class="bi bi-person-circle profile-icon"></i>
-                    <!-- Створюємо рамку навколо аватару з кольором
-                    в залежності від рангу користувача -->
-                    <img class="cosmetic-frame"
-                        src="{% static '' %}rank_frames/{{ user.get_rank_display|lower }}-status.svg">
+                <div class="profile-wrapper display-3">
+                    <!-- Фото профілю -->
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
+                            class="rounded-circle mx-auto mb-3" 
+                            style="width: 120px; height: 120px; object-fit: cover;">
+                        <!-- Створюємо рамку навколо аватару з кольором
+                        в залежності від рангу користувача -->
+                        <img class="cosmetic-frame"
+                            src="{% static '' %}rank_frames/{{ user.get_rank_display|lower }}-status.svg">
+                    {% else %}
+                        <i class="bi bi-person-circle profile-icon"></i>
+                        <img class="cosmetic-frame"
+                            src="{% static '' %}rank_frames/{{ user.get_rank_display|lower }}-status.svg">
+                    {% endif %}
                 </div>
                 <h5 class="card-title">Профіль</h5>
                 <p class="card-text">Хороший день для гри, {{ user.nickname }}!</p>

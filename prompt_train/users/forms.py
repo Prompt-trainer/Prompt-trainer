@@ -18,8 +18,15 @@ class RegistrationForm(UserCreationForm):
 class CustomUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ["email", "nickname"]
+        fields = ["email", "nickname", "profile_picture"]
+        widgets = {
+            'profile_picture': forms.FileInput(attrs={
+                'accept': 'image/*',
+                'class': 'form-control'
+            })
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].disabled = True
+        self.fields['profile_picture'].label = 'Фото профілю'

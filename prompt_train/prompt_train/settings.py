@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
     "crispy_forms",
     "crispy_bootstrap5",
     "django_filters",
@@ -199,7 +200,7 @@ CHANNEL_LAYERS = {
             "hosts": [("127.0.0.1", 6379)],
         },
     },
-}
+}   
 CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
 
 # ALL-AUTH
@@ -210,24 +211,30 @@ ACCOUNT_UNIQUE_EMAIL = True
 # Вказуємо, що у нашій моделі CustomUser відсутнє поле username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
-# Задаємо спосіб автентифікації - email
-ACCOUNT_LOGIN_METHODS = {'email'}
-
-# Робимо email обов'язковим щоб запитувати його при відсутності
-# надавання email'у GitHubAPI. Пароль також є обов'язковим.
-# Поля username немає через його відсутність у базі даних
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-
 # Вимикаємо перевірку email при звичайній реєстрації.
 # Потрібно для підключення GitHub до існуючого акаунту
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-# Вимикаємо перевірку email при реєстрації через GitHub,
-# користувач одразу активний
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+# Задаємо спосіб автентифікації - email
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+# Робимо email обов'язковим щоб запитувати його при відсутності
+# надавання email'у GitHubAPI. Пароль та нікнейм також є обов'язковими.
+# Поля username немає через його відсутність у базі даних
+ACCOUNT_SIGNUP_FIELDS = [
+    "nickname*",
+    "email*",
+    "password1*",
+    "password2*",
+]
 
 # Вимагаємо email при реєстрації через GitHub
 SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+
+# Вимикаємо перевірку email при реєстрації через GitHub,
+# користувач одразу активний
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"  
 
 # Дозволяємо логін без перевірки email
 SOCIALACCOUNT_LOGIN_ON_EMAIL_VERIFICATION = True
@@ -253,8 +260,6 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Logging configuration
-
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -282,3 +287,21 @@ LOGGING = {
         },
     },
 }
+
+USE_S3 = config("USE_S3", default=False, cast=bool)
+if USE_S3:
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='eu-north-1')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+    
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
+    
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'

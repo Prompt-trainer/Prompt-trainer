@@ -42,12 +42,14 @@ def profile_view(request):
 
 @login_required
 def edit_profile_view(request):
-    form = CustomUserForm(instance=request.user)
     if request.method == "POST":
-        form = CustomUserForm(request.POST, instance=request.user)
+        form = CustomUserForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, "Профіль успішно оновлено!")
             return redirect("auth:profile")
+    else:
+        form = CustomUserForm(instance=request.user)
     return render(request, "users/edit_profile.html", {"form": form})
 
 
