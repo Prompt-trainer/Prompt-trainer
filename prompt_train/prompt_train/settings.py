@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.contrib import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,11 +69,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
-
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -157,14 +153,19 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Messages
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
+
 # Authentication settings
 LOGIN_URL = "auth:login"
 LOGIN_REDIRECT_URL = "prompt_gamified:home_page"
 LOGOUT_REDIRECT_URL = "auth:login"
 
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"  # Redis як broker
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"  # Зберігання результатів
+CELERY_BROKER_URL = "redis://redis:6379/0"  # Redis як broker
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"  # Зберігання результатів
 
 # Серіалізація (JSON безпечніший за pickle)
 CELERY_ACCEPT_CONTENT = ["json"]

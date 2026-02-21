@@ -58,3 +58,9 @@
     pointer-events: none;
     z-index: 2;
 }
+
+.btn.btn-sm.btn-purchased:disabled {
+    background-color: rgb(82, 82, 82) !important;
+    color: rgb(255, 255, 255) !important;
+    border-color: white !important;
+}

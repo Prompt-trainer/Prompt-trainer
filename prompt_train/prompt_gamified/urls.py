@@ -20,5 +20,6 @@ urlpatterns = [
         views.guess_the_best_prompt_view,
         name="guess_the_best_prompt",
     ),
-    path("store/", views.store_view , name="store")
+    path("store/", views.store_view , name="store"),
+    path("buy_cosmetic/<int:cosmetic_id>/", views.buy_cosmetic_view, name="buy_cosmetic"),
 ]

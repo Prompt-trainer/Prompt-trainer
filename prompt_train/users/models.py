@@ -1,7 +1,7 @@
 import os
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.db import models
+from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
@@ -108,3 +108,37 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return self.is_staff
+
+    def get_available_rang_rings(self):
+        from prompt_gamified.models import Cosmetic
+
+        RANK_ORDER = ['B', 'S', 'G', 'R', 'D']
+        # Задаємо індекс рангу користувача
+        user_rank_index = RANK_ORDER.index(self.rank)
+
+        # Повертаємо лише рангові кільця, у яких
+        # необхідний ранг не більше рангу користувача.
+        return Cosmetic.objects.filter(
+            type="rank_ring",
+            # Наприклад, кільце 'G' з індексом 2 не попаде в user_rank_index зі значенням 1,
+            # бо RANK_ORDER[:1 + 1] видає лише елементи з індексом 0 і 1
+            rank_required__in=RANK_ORDER[:user_rank_index +1]
+        )
+    
+    def buy_cosmetic(self, cosmetic):
+        from prompt_gamified.models import UserCosmetic
+
+        if cosmetic.type == "rang_ring":
+            raise ValidationError("Рангові кільця не можуть бути купленими.")
+        if UserCosmetic.objects.filter(user=self, cosmetic=cosmetic).exists():
+            raise ValidationError("Не можна придбати вже куплений елемент косметики.")
+        if self.points < cosmetic.price:
+            raise ValidationError("Не вистачає поінтів на купівлю елемента косметики.")
+        
+        with transaction.atomic():
+            self.points -= cosmetic.price
+            self.save()
+
+            UserCosmetic.objects.create(
+                user=self, cosmetic=cosmetic
+            )

@@ -30,7 +30,7 @@ class PromptAdmin(admin.ModelAdmin):
 
 @admin.register(Cosmetic)
 class CosmeticAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "svg_code")
+    list_display = ("name", "price")
     list_filter = ("name", "price")
     search_fields = ("name", "price", "user__nickname")
     list_editable = ("price",)
