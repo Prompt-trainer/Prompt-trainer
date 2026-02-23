@@ -34,12 +34,11 @@
                             style="width: 120px; height: 120px; object-fit: cover;">
                         <!-- Створюємо рамку навколо аватару з кольором
                         в залежності від рангу користувача -->
-                        <img class="cosmetic-frame"
-                            src="{% static '' %}rank_frames/{{ user.get_rank_display|lower }}-status.svg">
+                        {% if user.active_ring %}
+                            <img class="cosmetic-frame" src="{% static user.active_ring.svg_code %}">
+                        {% endif %}
                     {% else %}
                         <i class="bi bi-person-circle profile-icon"></i>
-                        <img class="cosmetic-frame"
-                            src="{% static '' %}rank_frames/{{ user.get_rank_display|lower }}-status.svg">
                     {% endif %}
                 </div>
                 <h5 class="card-title">Профіль</h5>
@@ -50,24 +49,24 @@
 
                 <div class="progress mt-0 mb-2" role="progressbar"
                     aria-label="Досвід користувача"
-                    aria-valuenow="{{ user.exp }}" aria-valuemin="0" aria-valuemax="18">
+                    aria-valuenow="{{ user.exp }}" aria-valuemin="0" aria-valuemax="19">
                     <div class="progress-bar progress-bar-striped"
-                        style="width: {% widthratio user.exp 18 100 %}%">
+                        style="width: {% widthratio user.exp 19 100 %}%">
                         {{ user.exp }}
                     </div>
                 </div>
 
 
-                <p class="card-text">Твої очки: {{ user.points }} <i class="bi bi-hurricane"></i></p>
+                <p class="card-text">Твої поінти: {{ user.points }} <i class="bi bi-hurricane"></i></p>
                 <a href="{% url 'auth:profile' %}" class="btn btn-outline-primary my-2">Переглянути профіль</a>
             </div>
         </div>
     </div>
 
 
-    <div class="col">
-        <div class="row my-4 h-50">
-            <div class="col">
+    <div class="col d-flex flex-column justify-content-center">
+        <div class="row mt-4">
+            <div class="col mb-4">
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Тренування</h5>
@@ -78,7 +77,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Вгадай кращий промпт</h5>
@@ -89,7 +88,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-danger text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">🎯 Челендж</h5>
@@ -101,8 +100,8 @@
         </div>
 
 
-        <div class="row mt-4">
-            <div class="col">
+        <div class="row">
+            <div class="col mb-4">
                 <div class="card h-100 border-success text-center p-2">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Бібліотека прикладів</h5>
@@ -113,7 +112,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-warning text-center p-2">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Лідерборд</h5>

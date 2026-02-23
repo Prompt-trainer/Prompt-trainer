@@ -27,4 +27,6 @@ urlpatterns = [
             template_name="users/password_change_done.html"),name="password_change_done"
     ),
     path("profile/delete/", views.delete_profile_view, name="delete_profile"),
+    path("profile/cosmetics/", views.user_cosmetics_view, name="user_cosmetics"),
+    path("profile/cosmetics/activate/<int:user_cosmetic_id>/", views.activate_cosmetic_view, name="activate_cosmetic"),
 ]

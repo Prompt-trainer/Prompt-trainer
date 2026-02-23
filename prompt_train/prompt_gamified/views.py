@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, login
 from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
-from users.models import CustomUser
-from .models import Prompt, Cosmetic, UserCosmetic
+from users.models import CustomUser, Cosmetic, UserCosmetic
+from .models import Prompt
 from django.db import transaction
 import random
 from .utils import (
@@ -95,11 +95,12 @@ def guess_the_best_prompt_view(request):
     return render(request, "prompt_gamified/guess_the_best_prompt.html", context)
 
 
+@login_required
 def store_view(request):
     # Відображаємо елементи косметики всіх типів, окрім рангових кілець
-    cosmetics = Cosmetic.objects.filter(type__in=["ring", "element", "title"])
+    cosmetics = Cosmetic.objects.exclude(type="rank_ring")
 
-    # Отримуємо список id елментів косметики, купленної користувачем
+    # Отримуємо список id елементів косметики, купленної користувачем
     purchased_ids = set(
         UserCosmetic.objects.filter(user=request.user)
         .values_list("cosmetic_id", flat=True)
@@ -112,13 +113,15 @@ def store_view(request):
     return render(request, "prompt_gamified/store.html", context)
 
 
+@login_required
 def buy_cosmetic_view(request, cosmetic_id):
-    cosmetic = Cosmetic.objects.get(id=cosmetic_id)
-    try:
-        request.user.buy_cosmetic(cosmetic)
-        messages.success(request, "Елемент косметики успішно придбано!")
-    except ValidationError as e:
-        for message in e.messages:
-            messages.error(request, message)
+    if request.method == "POST":
+        cosmetic = Cosmetic.objects.get(id=cosmetic_id)
+        try:
+            request.user.buy_cosmetic(cosmetic)
+            messages.success(request, "Елемент оформлення успішно придбано!")
+        except ValidationError as e:
+            for message in e.messages:
+                messages.error(request, message)
 
     return redirect("prompt_gamified:store")

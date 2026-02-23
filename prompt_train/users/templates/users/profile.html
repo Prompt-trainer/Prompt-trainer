@@ -23,11 +23,12 @@
                 {{ user.exp }}
             </div>
         </div>
-        <p class="card-text"><strong>Твої очки:</strong> {{ user.points }} <i class="bi bi-hurricane"></i></p>
-
+        <p class="card-text"><strong>Твої поінти:</strong> {{ user.points }} <i class="bi bi-hurricane"></i></p>
+        
         <a class="btn btn-outline-primary mt-auto" href="{% url 'auth:edit_profile' %}">Редагувати профіль</a>
         <hr>
-        <a class="btn btn-outline-success mt-auto" href="#">До магазину</a>
+        <a class="btn btn-outline-primary mt-auto" href="{% url 'auth:user_cosmetics' %}">Оформлення профілю</a>
+        <a class="btn btn-outline-success mt-auto" href="{% url 'prompt_gamified:store' %}">До магазину</a>
         <hr>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
@@ -45,7 +46,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Ви впевнені, що хочете видалити свій профіль? Ця дія є незворотною.</p>
-                    <p>Усі ваші дані, включаючи досягнення, очки та історію, будуть видалені назавжди.</p>
+                    <p>Усі ваші дані, включаючи досягнення, поінти та історію, будуть видалені назавжди.</p>
                     <p>Якщо ви впевнені, що хочете видалити свій профіль, натисніть кнопку "Видалити профіль" нижче.</p>
                 </div>
                 <div class="modal-footer">

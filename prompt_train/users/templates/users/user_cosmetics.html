@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Оформлення профілю
+{% endblock %}
+
+{% block styles %}
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+<header class="py-4 border-bottom">
+    <div class="container text-center">
+        <h1 class="display-6">Оформлення профілю</h1>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        {% for uc in user_cosmetics %}
+            <div class="col-md-3 col-sm-6 fade-in d-flex">
+                <div class="card w-100 text-center flex-fill mt-4" style="border-color: blueviolet">
+                    <div class="p-3 mt-3 d-flex align-items-center justify-content-center" style="height: 150px">
+                        <img src="{% static uc.cosmetic.svg_code %}" class="img-fluid" style="max-height: 150px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ uc.cosmetic.name }}</h5>
+                        <p class="card-subtitle">
+                            {% if uc.cosmetic.type == "title" %}Титул
+                            {% elif uc.cosmetic.type == "ring" or uc.cosmetic.type == "rank_ring" %}Кільце
+                            {% elif uc.cosmetic.type == "element" %}Елемент
+                            {% endif %}
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex align-items-center justify-content-center"
+                            style="min-height: 50px;">
+                            {% if uc.cosmetic.id in active_cosmetics_ids %}
+                                <button class="btn btn-sm w-100 btn-purchased" disabled>Активовано</button>
+                            {% else %}
+                            <form action="{% url 'auth:activate_cosmetic' uc.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-sm w-100" style="background-color:rgb(93, 101, 255);">Активувати</button>
+                            </form>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Prompt, Cosmetic
+from .models import Prompt
+
 
 
 @admin.register(Prompt)
@@ -26,11 +27,3 @@ class PromptAdmin(admin.ModelAdmin):
         )
 
     improvement_hint_preview.short_description = "Підказка"
-
-
-@admin.register(Cosmetic)
-class CosmeticAdmin(admin.ModelAdmin):
-    list_display = ("name", "price")
-    list_filter = ("name", "price")
-    search_fields = ("name", "price", "user__nickname")
-    list_editable = ("price",)

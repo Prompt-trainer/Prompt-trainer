@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Крамниця
+Магазин
 {% endblock %}
 
 {% block styles %}
@@ -12,7 +12,7 @@
 {% block header %}
 <header class="py-4 border-bottom">
     <div class="container text-center">
-        <h1 class="display-6">Крамниця елементів оформлення</h1>
+        <h1 class="display-6">Магазин елементів оформлення</h1>
         <p class="lead">Персоналізуй профіль під себе</p>
     </div>
 </header>
@@ -23,7 +23,7 @@
     <div class="row">
         {% for cosm in cosmetics %}
             <div class="col-md-3 col-sm-6 fade-in d-flex">
-                <div class="card w-100 text-center flex-fill" style="border-color: blueviolet">
+                <div class="card w-100 text-center flex-fill mt-4" style="border-color: blueviolet">
                     <div class="p-3 mt-3 d-flex align-items-center justify-content-center" style="height: 150px">
                         <img src="{% static cosm.svg_code %}" class="img-fluid" style="max-height: 150px;">
                     </div>

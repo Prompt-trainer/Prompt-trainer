@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.conf import settings
 from .forms import RegistrationForm, CustomUserForm
-from .tasks import send_registration_email_task
-from django.utils import timezone
+from .models import Cosmetic, UserCosmetic
+
 
 
 def register_view(request):
@@ -60,3 +60,25 @@ def delete_profile_view(request):
         user.delete()
         return redirect("auth:login")
     return redirect("auth:profile")
+
+
+@login_required
+def user_cosmetics_view(request):
+    user_cosmetics = UserCosmetic.objects.filter(user=request.user).select_related('cosmetic').order_by('cosmetic__type', 'purchase_date')
+    active_cosmetics_ids = set()
+    if request.user.active_ring_id:
+        active_cosmetics_ids.add(request.user.active_ring_id)
+    if request.user.active_title_id:
+        active_cosmetics_ids.add(request.user.active_title_id)
+    if request.user.active_element_id:
+        active_cosmetics_ids.add(request.user.active_element_id)
+    return render(request, "users/user_cosmetics.html", {"user_cosmetics": user_cosmetics, "active_cosmetics_ids": active_cosmetics_ids})
+
+
+@login_required
+def activate_cosmetic_view(request, user_cosmetic_id):
+    if request.method == "POST":
+        user_cosmetic = UserCosmetic.objects.get(id=user_cosmetic_id, user=request.user)
+        user_cosmetic.activate_cosmetic()
+        messages.success(request, "Елемент оформлення успішно активовано!")
+    return redirect("auth:user_cosmetics")
