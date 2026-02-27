@@ -15,8 +15,8 @@ urlpatterns = [
     path("register/", views.register_view, name="register"),
     path("login/", LoginView.as_view(template_name="users/login.html"), name="login"),
     path("logout/", LogoutView.as_view(next_page="auth:login"), name="logout"),
-    path("google/login/", GoogleLoginView.as_view(), name="google_login"),
-    path("google/callback/", GoogleCallbackView.as_view(), name="google_callback"),
+    path("google/login/", views.GoogleLoginView.as_view(), name="google_login"),
+    path("google/callback/", views.GoogleCallbackView.as_view(), name="google_callback"),
     path("profile/", views.profile_view, name="profile"),
     path("profile/edit/", views.edit_profile_view, name="edit_profile"),
     path("password/change/",PasswordChangeView.as_view(
@@ -28,5 +28,9 @@ urlpatterns = [
     ),
     path("profile/delete/", views.delete_profile_view, name="delete_profile"),
     path("profile/cosmetics/", views.user_cosmetics_view, name="user_cosmetics"),
-    path("profile/cosmetics/activate/<int:user_cosmetic_id>/", views.activate_cosmetic_view, name="activate_cosmetic"),
+
+    path("profile/cosmetics/activate/<int:user_cosmetic_id>/",
+        views.activate_cosmetic_view, name="activate_cosmetic"),
+    path("profile/cosmetics/deactivate/<int:user_cosmetic_id>/",
+        views.take_off_cosmetic_view, name="deactivate_cosmetic")
 ]

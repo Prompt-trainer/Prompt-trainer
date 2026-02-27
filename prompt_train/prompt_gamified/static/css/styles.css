@@ -48,7 +48,39 @@
     z-index: 1;
 }
 
-.cosmetic-frame {
+.profile-wrapper-pr {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-buy-activate {
+    background-color: rgb(93, 101, 255) !important;
+}
+
+.btn-buy-activate:hover {
+    background-color: rgb(71, 77, 198) !important;
+}
+
+.btn.btn-sm.btn-purchased:disabled {
+    background-color: rgb(82, 82, 82) !important;
+    color: rgb(255, 255, 255) !important;
+    border-color: white !important;
+}
+
+.btn-deactivate {
+    background-color: rgb(82, 82, 82);
+    color: rgb(255, 255, 255);
+    border-color: white;
+}
+
+.btn-deactivate:hover {
+    background-color: rgb(65, 65, 65);
+    border: none;
+}
+
+/* Декорації на головній сторінці */
+
+.cosmetic-ring-home {
     position: absolute;
     top: -5px;
     left: -5px;
@@ -59,8 +91,39 @@
     z-index: 2;
 }
 
-.btn.btn-sm.btn-purchased:disabled {
-    background-color: rgb(82, 82, 82) !important;
-    color: rgb(255, 255, 255) !important;
-    border-color: white !important;
+.cosmetic-element-home {
+    position: absolute;
+    bottom: 5px;
+    left: 85px;
+    width: 30%;
+    height: 30%;
+    z-index: 3;
+}
+
+.cosmetic-title-home {
+    width: 50%;
+}
+
+/* Декорації на сторінці профілю */
+
+.cosmetic-ring-profile {
+    position: absolute;
+    width: 108%;
+    top: -6px;
+    left: -6px;
+    z-index: 2;
+}
+
+.cosmetic-element-profile {
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    bottom: 20px;
+    right: 0px;
+    z-index: 3;
+}
+
+.cosmetic-title-profile {
+    height: 50%;
+    width: 50%;
 }

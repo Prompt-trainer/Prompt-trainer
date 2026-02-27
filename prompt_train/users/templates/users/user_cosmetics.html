@@ -39,11 +39,14 @@
                         <li class="list-group-item d-flex align-items-center justify-content-center"
                             style="min-height: 50px;">
                             {% if uc.cosmetic.id in active_cosmetics_ids %}
-                                <button class="btn btn-sm w-100 btn-purchased" disabled>Активовано</button>
+                            <form action="{% url 'auth:deactivate_cosmetic' uc.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-sm w-100 btn-deactivate">Зняти</button>
+                            </form>
                             {% else %}
                             <form action="{% url 'auth:activate_cosmetic' uc.id %}" method="post">
                                 {% csrf_token %}
-                                <button class="btn btn-sm w-100" style="background-color:rgb(93, 101, 255);">Активувати</button>
+                                <button class="btn btn-sm w-100 btn-buy-activate">Активувати</button>
                             </form>
                             {% endif %}
                         </li>

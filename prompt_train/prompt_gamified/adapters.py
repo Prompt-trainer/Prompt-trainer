@@ -65,7 +65,7 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
             # Шукаємо користувача з email у бд
             try:
                 existing_user = CustomUser.objects.get(email=email)
-                # У разі знаходження підключаємо до існучючого користувача
+                # У разі знаходження підключаємо до існуючого користувача
                 sociallogin.connect(request, existing_user)
             # Інакше створюємо нового користувача
             except CustomUser.DoesNotExist:

@@ -43,7 +43,7 @@
                             {% if cosm.id in purchased_ids %}
                                 <button class="btn btn-sm w-100 btn-purchased" disabled>Куплено</button>
                             {% else %}
-                                <button class="btn btn-sm w-100" style="background-color:rgb(93, 101, 255);" 
+                                <button class="btn btn-sm w-100 btn-buy-activate"
                                 data-bs-toggle="modal" data-bs-target="#purchaseModal{{ cosm.id }}">Купити</button>
                             {% endif %}
                         </li>

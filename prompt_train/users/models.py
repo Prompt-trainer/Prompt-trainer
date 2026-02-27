@@ -229,7 +229,7 @@ class UserCosmetic(models.Model):
         unique_together = ("user", "cosmetic")
 
     def activate_cosmetic(self):
-        """Активує косметику для користувача, оновлюючи відповідні поля в CustomUser"""
+        """Активує косметику для користувача, оновлюючи відповідні поля в CustomUser."""
         user = self.user
         
         # Оновлюємо відповідне поле в CustomUser в залежності від типу косметики
@@ -239,5 +239,18 @@ class UserCosmetic(models.Model):
             user.active_element = self.cosmetic
         elif self.cosmetic.type == "title":
             user.active_title = self.cosmetic
+        
+        user.save()
+
+    def take_off_cosmetic(self):
+        """Деактивує косметику для користувача, змінюючи відповідні поля на пусті."""
+        user = self.user
+
+        if self.cosmetic.type in ["ring", "rank_ring"]:
+            user.active_ring = None
+        elif self.cosmetic.type == "element":
+            user.active_element = None
+        elif self.cosmetic.type == "title":
+            user.active_title = None
         
         user.save()

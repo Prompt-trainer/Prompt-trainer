@@ -32,16 +32,32 @@
                         <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
                             class="rounded-circle mx-auto mb-3" 
                             style="width: 120px; height: 120px; object-fit: cover;">
+
                         <!-- Створюємо рамку навколо аватару з кольором
                         в залежності від рангу користувача -->
                         {% if user.active_ring %}
                             <img class="cosmetic-frame" src="{% static user.active_ring.svg_code %}">
                         {% endif %}
+                        
                     {% else %}
                         <i class="bi bi-person-circle profile-icon"></i>
                     {% endif %}
+
+                    <!-- Декорації -->
+                    {% if user.active_ring %}
+                        <img class="cosmetic-ring-home" src="{% static user.active_ring.svg_code %}">
+                    {% endif %}
+
+                    {% if user.active_element %}
+                        <img class="cosmetic-element-home" src="{% static user.active_element.svg_code %}">
+                    {% endif %}
+                    
                 </div>
                 <h5 class="card-title">Профіль</h5>
+                <!-- Титул -->
+                {% if user.active_title %}
+                    <p><img class="cosmetic-title-home" src="{% static user.active_title.svg_code %}"></p>
+                {% endif %}
                 <p class="card-text">Хороший день для гри, {{ user.nickname }}!</p>
                 <p class="card-text mb-2">Твій ранг: {{ user.get_rank_display }}</p>
                 <p class="card-text mb-1">Твій досвід: </p>
