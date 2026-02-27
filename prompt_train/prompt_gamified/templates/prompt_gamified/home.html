@@ -32,13 +32,6 @@
                         <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
                             class="rounded-circle mx-auto mb-3" 
                             style="width: 120px; height: 120px; object-fit: cover;">
-
-                        <!-- Створюємо рамку навколо аватару з кольором
-                        в залежності від рангу користувача -->
-                        {% if user.active_ring %}
-                            <img class="cosmetic-frame" src="{% static user.active_ring.svg_code %}">
-                        {% endif %}
-                        
                     {% else %}
                         <i class="bi bi-person-circle profile-icon"></i>
                     {% endif %}
