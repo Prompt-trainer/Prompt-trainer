@@ -19,4 +19,4 @@ static:
 	python manage.py collectstatic
 
 tests:
-	python manage.py test
+	python manage.py test --settings=prompt_train.settings_test
