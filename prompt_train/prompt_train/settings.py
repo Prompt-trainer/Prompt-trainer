@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.contrib import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,11 +69,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
-
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -157,14 +153,19 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Messages
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
+
 # Authentication settings
 LOGIN_URL = "auth:login"
 LOGIN_REDIRECT_URL = "prompt_gamified:home_page"
 LOGOUT_REDIRECT_URL = "auth:login"
 
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"  # Redis як broker
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"  # Зберігання результатів
+CELERY_BROKER_URL = "redis://redis:6379/0"  # Redis як broker
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"  # Зберігання результатів
 
 # Серіалізація (JSON безпечніший за pickle)
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -175,7 +176,6 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Kiev"
 
 # Email конфігурація
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
@@ -205,9 +205,23 @@ CHANNEL_LAYERS = {
 CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
 
 # ALL-AUTH
+
+# Робимо email унікальним
 ACCOUNT_UNIQUE_EMAIL = True
+
+# Вказуємо, що у нашій моделі CustomUser відсутнє поле username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# Вимикаємо перевірку email при звичайній реєстрації.
+# Потрібно для підключення GitHub до існуючого акаунту
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Задаємо спосіб автентифікації - email
 ACCOUNT_LOGIN_METHODS = {"email"}
+
+# Робимо email обов'язковим щоб запитувати його при відсутності
+# надавання email'у GitHubAPI. Пароль та нікнейм також є обов'язковими.
+# Поля username немає через його відсутність у базі даних
 ACCOUNT_SIGNUP_FIELDS = [
     "nickname*",
     "email*",
@@ -215,14 +229,22 @@ ACCOUNT_SIGNUP_FIELDS = [
     "password2*",
 ]
 
-
+# Вимагаємо email при реєстрації через GitHub
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 
 
+# Вимикаємо перевірку email при реєстрації через GitHub,
+# користувач одразу активний
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"  
-SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
+# Дозволяємо логін без перевірки email
+SOCIALACCOUNT_LOGIN_ON_EMAIL_VERIFICATION = True
+
+# Задаємо кастомний адаптер, який перевизначає поведінку функцій
+# класу DefaultSocialAccountAdapter
 SOCIALACCOUNT_ADAPTER = "prompt_gamified.adapters.CustomSocialAccountAdapter"
+
+# Автоматично створюємо користувача без показу форми
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -231,6 +253,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": config("GITHUB_OAUTH_CLIENT_ID"),
             "secret": config("GITHUB_OAUTH_CLIENT_SECRET"),
         },
+        # Вказує, які дані отримуються від GitHub
+        # 1. "user" - username
+        # 2. user:email" - email користувача
         "SCOPE": ["user", "user:email"],
     },
 }
@@ -263,6 +288,7 @@ LOGGING = {
         },
     },
 }
+
 USE_S3 = config("USE_S3", default=False, cast=bool)
 if USE_S3:
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')

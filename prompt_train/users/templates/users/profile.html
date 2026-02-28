@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block styles %}
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <div class="card text-center p-4 mx-auto" style="max-width: 600px;">
     <div class="card-body">
         <!-- Відображення фото профілю -->
-        {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
-                class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-        {% else %}
-            <p class="display-3"><i class="bi bi-person-circle"></i></p>
-        {% endif %}
-        
+        <div class="profile-wrapper-pr display-3">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
+                    class="rounded-circle mx-auto mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <p class="display-3"><i class="bi bi-person-circle"></i></p>
+            {% endif %}
+
+            {% if user.active_ring %}
+                <img class="cosmetic-ring-profile" src="{% static user.active_ring.svg_code %}">
+            {% endif %}
+
+            {% if user.active_element %}
+                <img class="cosmetic-element-profile" src="{% static user.active_element.svg_code %}">
+            {% endif %}
+        </div>
+
         <h5 class="card-title">Профіль</h5>
+        {% if user.active_title %}
+            <p><img class="cosmetic-title-profile" src="{% static user.active_title.svg_code %}"></p>
+        {% endif %}
+
         <p class="card-text mb-2"><strong>Твій нік:</strong> {{ user.nickname }}</p>
         <p class="card-text mb-2"><strong>Твій email:</strong> {{ user.email }}</p>
         <p class="card-text mb-2"><strong>Твій ранг:</strong> {{ user.get_rank_display }}</p>
@@ -23,11 +41,12 @@
                 {{ user.exp }}
             </div>
         </div>
-        <p class="card-text"><strong>Твої очки:</strong> {{ user.points }} <i class="bi bi-hurricane"></i></p>
-
+        <p class="card-text"><strong>Твої поінти:</strong> {{ user.points }} <i class="bi bi-hurricane"></i></p>
+        
         <a class="btn btn-outline-primary mt-auto" href="{% url 'auth:edit_profile' %}">Редагувати профіль</a>
         <hr>
-        <a class="btn btn-outline-success mt-auto" href="#">До магазину</a>
+        <a class="btn btn-outline-primary mt-auto" href="{% url 'auth:user_cosmetics' %}">Оформлення профілю</a>
+        <a class="btn btn-outline-success mt-auto" href="{% url 'prompt_gamified:store' %}">До магазину</a>
         <hr>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
@@ -45,10 +64,10 @@
                 </div>
                 <div class="modal-body">
                     <p>Ви впевнені, що хочете видалити свій профіль? Ця дія є незворотною.</p>
-                    <p>Усі ваші дані, включаючи досягнення, очки та історію, будуть видалені назавжди.</p>
+                    <p>Усі ваші дані, включаючи досягнення, поінти та історію, будуть втрачені назавжди.</p>
                     <p>Якщо ви впевнені, що хочете видалити свій профіль, натисніть кнопку "Видалити профіль" нижче.</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="justify-content: center;">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <form method="post" action="{% url 'auth:delete_profile' %}">
                         {% csrf_token %}

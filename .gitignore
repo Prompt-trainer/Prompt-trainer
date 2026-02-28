@@ -12,5 +12,7 @@ wheels/
 key.pem
 cert.pem
 staticfiles/
+poetry.lock
 prompt_train/media/*
 .ruffle_cache/
+.claude/

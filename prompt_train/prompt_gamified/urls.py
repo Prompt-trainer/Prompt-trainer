@@ -9,8 +9,6 @@ app_name = "prompt_gamified"
 urlpatterns = [
     path("", views.index_view, name="index"),
     path("home", views.home_view, name="home_page"),
-    path("auth/google/login/", GoogleLoginView.as_view(), name="google_login"),
-    path("auth/google/callback/", GoogleCallbackView.as_view(), name="google_callback"),
     path("good-prompts/", views.good_prompts_view, name="good_prompts"),
     path("prompt-trainer/", views.prompt_trainer_view, name="prompt_trainer"),
     path("leaderboard/", views.leaderboard_view, name="leaderboard"),
@@ -20,4 +18,6 @@ urlpatterns = [
         views.guess_the_best_prompt_view,
         name="guess_the_best_prompt",
     ),
+    path("store/", views.store_view , name="store"),
+    path("buy-cosmetic/<int:cosmetic_id>/", views.buy_cosmetic_view, name="buy_cosmetic"),
 ]

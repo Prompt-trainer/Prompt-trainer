@@ -42,6 +42,10 @@
                     <a class="nav-link" href="{% url 'prompt_gamified:leaderboard' %}">Лідерборд</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'prompt_gamified:store' %}">Магазин</a>
+                </li>
+
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'chat:global_chat' %}">
