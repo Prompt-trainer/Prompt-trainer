@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, login
@@ -116,7 +116,7 @@ def store_view(request):
 @login_required
 def buy_cosmetic_view(request, cosmetic_id):
     if request.method == "POST":
-        cosmetic = Cosmetic.objects.get(id=cosmetic_id)
+        cosmetic = get_object_or_404(Cosmetic, id=cosmetic_id)
         try:
             request.user.buy_cosmetic(cosmetic)
             messages.success(request, "Елемент оформлення успішно придбано!")
