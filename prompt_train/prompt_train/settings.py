@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="prompt-trainer.space,www.prompt-trainer.space").split(",")
 
 
 # Application definition
@@ -164,8 +164,8 @@ LOGIN_REDIRECT_URL = "prompt_gamified:home_page"
 LOGOUT_REDIRECT_URL = "auth:login"
 
 
-CELERY_BROKER_URL = "redis://redis:6379/0"  # Redis як broker
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"  # Зберігання результатів
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 # Серіалізація (JSON безпечніший за pickle)
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -184,7 +184,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # Сайт URL для посилань у листах
-SITE_URL = "http://localhost:8000"
+SITE_URL = "https://prompt-trainer.space"
 
 # Опціонально: налаштування retry
 CELERY_TASK_ACKS_LATE = True  # Task підтверджується після виконання
@@ -198,7 +198,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("redis", 6379)],
         },
     },
 }   
@@ -291,18 +291,18 @@ LOGGING = {
 
 USE_S3 = config("USE_S3", default=False, cast=bool)
 if USE_S3:
-    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='eu-north-1')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
-    
-    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="eu-north-1")
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
     AWS_S3_FILE_OVERWRITE = False
     AWS_QUERYSTRING_AUTH = False
-    
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"

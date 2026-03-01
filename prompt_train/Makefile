@@ -20,3 +20,24 @@ static:
 
 tests:
 	python manage.py test --settings=prompt_train.settings_test
+
+shell:
+	python manage.py shell
+
+superuser:
+	python manage.py createsuperuser
+
+lint:
+	ruff check .
+
+format:
+	ruff format .
+
+docker-up:
+	docker compose -f docker/docker-compose.dev.yml up --build -d
+
+docker-down:
+	docker compose -f docker/docker-compose.dev.yml down
+
+docker-logs:
+	docker compose -f docker/docker-compose.dev.yml logs -f

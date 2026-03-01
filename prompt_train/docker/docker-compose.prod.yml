@@ -1,0 +1,94 @@
+services:
+  db:
+    image: postgres:16
+    container_name: prompt_trainer_prod_db
+    restart: unless-stopped
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    env_file: .env
+    networks:
+      - prod_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: prompt_trainer_prod_redis
+    restart: unless-stopped
+    volumes:
+      - redis_prod_data:/data
+    networks:
+      - prod_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: ../..
+      dockerfile: ./prompt_train/docker/Dockerfile.prod
+    container_name: prompt_trainer_prod_web
+    restart: unless-stopped
+    command: >
+      sh -c "uv run python manage.py migrate &&
+             uv run python manage.py collectstatic --noinput &&
+             uv run daphne -b 0.0.0.0 -p 8000 prompt_train.asgi:application"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - static_files:/app/prompt_train/staticfiles
+    networks:
+      - prod_network
+
+  celery:
+    build:
+      context: ../..
+      dockerfile: ./prompt_train/docker/Dockerfile.prod
+    container_name: prompt_trainer_prod_celery
+    restart: unless-stopped
+    command: uv run celery -A prompt_train worker -l info
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - prod_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: prompt_trainer_prod_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../nginx/certs:/etc/nginx/certs:ro
+      - static_files:/app/staticfiles:ro
+    depends_on:
+      - web
+    networks:
+      - prod_network
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:
+  static_files:
+
+networks:
+  prod_network:
