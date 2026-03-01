@@ -11,6 +11,7 @@ wheels/
 .env
 key.pem
 cert.pem
+prompt_train/nginx/nginx.conf
 staticfiles/
 poetry.lock
 prompt_train/media/*
