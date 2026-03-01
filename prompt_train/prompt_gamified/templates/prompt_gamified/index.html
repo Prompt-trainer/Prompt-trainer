@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Prompt gamified
+Prompt Trainer
 {% endblock %}
 
 {% block styles %}
@@ -10,25 +10,25 @@ Prompt gamified
 {% endblock %}
 
 {% block nav %}
-<!-- Navigation-->
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand" href="#header">Prompt gamified</a>
+        <a class="navbar-brand" href="#header">Prompt Trainer</a>
         <button id="themeToggle" class="btn btn-outline-secondary ms-3" type="button">
             <i class="bi bi-sun-fill"></i>
         </button>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
             aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
+            Меню
             <i class="fas fa-bars ms-1"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav text-uppercase ms-auto my-4 my-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#introduction">Introduction</a></li>
-                <li class="nav-item"><a class="nav-link" href="#games">Games</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#introduction">Вступ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#games">Режими</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">Про проєкт</a></li>
+                <li class="nav-item"><a class="nav-link" href="#team">Команда</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Контакти</a></li>
             </ul>
         </div>
     </div>
@@ -41,11 +41,13 @@ Prompt gamified
 <header class="header-bg text-white text-center d-flex align-items-center" id="header">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-12">
-                <h1 class="display-2 upside-down"><strong>Prompt gamified</strong></h1>
-                <p class="display-6">Lorem ipsum dolor sit amet</p>
-                <a class="btn btn-primary btn-lg text-uppercase" href="{% url 'prompt_gamified:home_page' %}">Get
-                    Started!</a>
+            <div class="col-12 bg-dark p-4 bg-opacity-10 rounded-pill shadow-lg">
+                <h1 class="display-2 upside-down"><strong>Prompt Trainer</strong></h1>
+                <p class="display-6">
+                    Навчіться спілкуватися зі штучним інтелектом правильно, граючи в ігри!
+                </p>
+                <a class="btn btn-primary btn-lg text-uppercase"
+                    href="{% url 'prompt_gamified:home_page' %}">Почати!</a>
             </div>
         </div>
     </div>
@@ -58,18 +60,18 @@ Prompt gamified
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h2 class="mb-4">Introduction</h2>
+                <h2 class="mb-4">Вступ</h2>
                 <p class="text-muted mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
-                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
-                    nisi enim cursus est, eget facilisis orci nulla eu augue. Pellentesque a orci vehicula, ornare
-                    sem vel, varius felis. Nullam ut diam nec arcu hendrerit suscipit. Ut urna ipsum, mattis a
-                    pellentesque eget, rhoncus ut erat. Duis ornare porttitor metus, id pulvinar nulla imperdiet
-                    vel. Aliquam quis sapien sit amet nisi consectetur condimentum eget non felis. Morbi viverra
-                    fermentum massa, a tempor sapien tempus in. Phasellus feugiat lorem nunc, id laoreet tortor
-                    vulputate quis. Aliquam erat volutpat. Vivamus porttitor fringilla orci, hendrerit iaculis odio
-                    bibendum ac. Etiam vel pulvinar ex. Donec neque dui, lobortis ac risus sit amet, facilisis
-                    ultricies neque. Sed auctor sed nisi eget pretium.
+                    Prompt Trainer – це інтерактивна платформа для розвитку навичок написання ефективних промптів для
+                    штучного інтелекту. На відміну від традиційних навчальних методів, ви не просто вивчаєте теорію, а
+                    отримуєте практичний досвід: напишіть промпт, отримайте оцінку від ШІ та поради для покращення,
+                    проаналізуйте приклади інших користувачів і спостерігайте за своїм прогресом у реальному часі.
+                </p>
+                <p class="text-muted mb-4">
+                    Виконуйте міні-ігри, накопичуйте досвід та внутрішню валюту, піднімайтеся в рейтингу та
+                    розблоковуйте нові елементи для персоналізації вашого профілю. Спілкуйтесь з іншими учасниками
+                    спільноти у чаті, вивчайте бібліотеку найкращих промптів та розвивайте свої навички разом з
+                    однодумцями.
                 </p>
             </div>
         </div>
@@ -79,38 +81,46 @@ Prompt gamified
 <!-- Games -->
 <section class="text-center py-5" id="games">
     <div class="container">
-        <h2 class="mb-4">Games</h2>
+        <h2 class="mb-4">Режими</h2>
         <div class="row">
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 1">
+                <div class="card h-100 shadow">
+                    <img src="https://cdn.pixabay.com/photo/2024/07/31/10/23/ai-generated-8934213_1280.png" height="250"
+                        class="card-img-top object-fit-cover border-bottom" alt="Game 1">
                     <div class="card-body">
                         <h5 class="card-title">Тренування</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
-                            orci.</p>
-                        <a href="#" class="btn btn-primary">Play Now</a>
+                        <p class="card-text">
+                            Напишіть власний промпт і отримайте оцінку від ШІ разом із підказкою для покращення.
+                        </p>
+                        <a href="{% url 'prompt_gamified:prompt_trainer' %}" class="btn btn-primary">Грати</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 2">
+                <div class="card h-100 shadow">
+                    <img src="https://cdn.pixabay.com/photo/2023/11/10/14/01/scale-8379399_1280.png" height="250"
+                        class="card-img-top object-fit-cover border-bottom" alt="Game 2">
                     <div class="card-body">
                         <h5 class="card-title">Вгадай кращий промпт</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
-                            orci.</p>
-                        <a href="#" class="btn btn-primary">Play Now</a>
+                        <p class="card-text">
+                            Виберіть кращий з двох запропонованих промптів та перевірте своє розуміння принципів
+                            написання якісних запитів.
+                        </p>
+                        <a href="{% url 'prompt_gamified:guess_the_best_prompt' %}" class="btn btn-primary">Грати</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="https://picsum.photos/id/1011/400/250" class="card-img-top" alt="Game 3">
+                <div class="card h-100 shadow">
+                    <img src="https://cdn.pixabay.com/photo/2024/06/22/18/16/ai-generated-8846765_1280.png" height="250"
+                        class="card-img-top object-fit-cover border-bottom" alt="Game 3">
                     <div class="card-body">
-                        <h5 class="card-title">PvP Батл</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus
-                            orci.</p>
-                        <a href="#" class="btn btn-primary">Play Now</a>
+                        <h5 class="card-title">Челендж</h5>
+                        <p class="card-text">
+                            Отримайте випадковий промпт і спробуйте написати кращу версію. Покажіть своє мистецтво у
+                            написанні промптів.
+                        </p>
+                        <a href="{% url 'prompt_gamified:challenge' %}" class="btn btn-primary">Грати</a>
                     </div>
                 </div>
             </div>
@@ -120,100 +130,106 @@ Prompt gamified
 
 <!-- About -->
 <section class="about py-5" id="about">
-    <div class="container-fluid p-0">
-        <h2 class="mb-4 text-center">About Us</h2>
-        <div class="row g-0">
-            <div class="col-lg-6 order-lg-2"
-                style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;"></div>
-            <div class="col-lg-6 order-lg-1 my-auto p-3 text-center">
-                <h2>Lorem ipsum dolor sit amet</h2>
-                <p class="lead mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
-                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
-                    nisi enim cursus est, eget facilisis orci nulla eu augue.
-                </p>
+    <div class="container-fluid py-5">
+        <h2 class="mb-4 text-center">Про проєкт</h2>
+        <div class="shadow-lg">
+            <div class="row g-0">
+                <div class="col-lg-6 order-lg-2"
+                    style="background-image: url('https://img.freepik.com/free-photo/businessman-working-futuristic-office_23-2151003702.jpg'); height: 400px; background-size: cover; background-position: center;">
+                </div>
+                <div class="col-lg-6 order-lg-1 my-auto p-4 text-center">
+                    <h2>Навчання через практику</h2>
+                    <p class="lead mb-0">
+                        Ми віримо, що вчитися найкраще через постійну практику.
+                        Замість нудної теорії ви працюєте зs штучним інтелектом і одразу отримуєте зворотний зв’язок nf бачите,
+                        як навіть невеликі зміни можуть помітно покращити результат.
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="row g-0">
-            <div class="col-lg-6" style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;">
+            <div class="row g-0">
+                <div class="col-lg-6"
+                    style="background-image: url('https://img.freepik.com/free-photo/futuristic-business-scene-with-ultra-modern-ambiance_23-2151003773.jpg'); height: 400px; background-size: cover; background-position: center;">
+                </div>
+                <div class="col-lg-6 my-auto p-4 text-center">
+                    <h2>Спільнота та співпраця</h2>
+                    <p class="lead mb-0">
+                        Prompt Trainer – це більше, ніж просто тренажер: це активна спільнота однодумців. Спілкуйтесь з
+                        користувачами в глобальному чаті, обговорюйте стратегії та обмінюйтесь досвідом через приватні
+                        повідомлення. Вивчайте бібліотеку найкращих промптів, надихайтесь успіхами інших та зростайте
+                        разом зі спільнотою.
+                    </p>
+                </div>
             </div>
-            <div class="col-lg-6 my-auto p-3 text-center">
-                <h2>Lorem ipsum dolor sit amet</h2>
-                <p class="lead mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
-                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
-                    nisi enim cursus est, eget facilisis orci nulla eu augue.
-                </p>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col-lg-6 order-lg-2"
-                style="background-image: url('https://picsum.photos/id/84/800/400'); height: 400px;"></div>
-            <div class="col-lg-6 order-lg-1 my-auto p-3 text-center">
-                <h2>Lorem ipsum dolor sit amet</h2>
-                <p class="lead mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut finibus orci. Phasellus
-                    porttitor ligula sed leo volutpat pulvinar. Nunc placerat, lectus sit amet fringilla finibus,
-                    nisi enim cursus est, eget facilisis orci nulla eu augue.
-                </p>
+            <div class="row g-0">
+                <div class="col-lg-6 order-lg-2"
+                    style="background-image: url('https://img.freepik.com/free-photo/high-tech-ar-headset-surrounded-by-bright-blue-neon-colors_23-2151255149.jpg'); height: 400px; background-size: cover; background-position: center;">
+                </div>
+                <div class="col-lg-6 order-lg-1 my-auto p-4 text-center">
+                    <h2>Гейміфікація та розвиток</h2>
+                    <p class="lead mb-0">
+                        За досягнення у різних режимах ви накопичуєте досвід та внутрішню валюту. Піднімайтесь у
+                        рейтингу, перемагайте та персоналізуйте свій профіль предметами з магазину. Навчання
+                        трансформується на цікаву та захоплюючу гру, до якої хочеться повертатися щодня.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Team-->
+<!-- Team -->
 <section class="text-center py-5" id="team">
     <div class="container">
-        <h2 class="mb-4">Team</h2>
+        <h2 class="mb-4">Команда</h2>
         <div class="row">
             <figure class="col-md-4 mb-4">
+                <img class="img-fluid shadow bg-body-tertiary rounded-circle border border-3 border-tertiary mb-3"
+                    src="https://avatars.githubusercontent.com/u/187647913?v=4" alt="AndreyZd" width="200" height="200">
                 <blockquote class="blockquote">
-                    <p>A well-known quote, contained in a blockquote element.</p>
+                    <p>AndreyZd – <a class="text-decoration-none"
+                            href="https://github.com/rifemane5328">rifemane5328</a></p>
                 </blockquote>
-                <figcaption class="blockquote-footer">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </figcaption>
             </figure>
             <figure class="col-md-4 mb-4">
+                <img class="img-fluid shadow bg-body-tertiary rounded-circle border border-3 border-tertiary mb-3"
+                    src="https://avatars.githubusercontent.com/u/163851421?v=4" alt="IllyaDD" width="200" height="200">
                 <blockquote class="blockquote">
-                    <p>A well-known quote, contained in a blockquote element.</p>
+                    <p>IllyaDD – <a class="text-decoration-none" href="https://github.com/IllyaDD">IllyaDD</a></p>
                 </blockquote>
-                <figcaption class="blockquote-footer">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </figcaption>
             </figure>
             <figure class="col-md-4 mb-4">
+                <img class="img-fluid shadow bg-body-tertiary rounded-circle border border-3 border-tertiary mb-3"
+                    src="https://avatars.githubusercontent.com/u/150595953?v=4" alt="Kristen Gal" width="200"
+                    height="200">
                 <blockquote class="blockquote">
-                    <p>A well-known quote, contained in a blockquote element.</p>
+                    <p>Kristen Gal – <a class="text-decoration-none" href="https://github.com/KristenGal">KristenGal</a>
+                    </p>
                 </blockquote>
-                <figcaption class="blockquote-footer">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </figcaption>
             </figure>
         </div>
     </div>
 </section>
 
-<!-- Contact-->
+<!-- Contact -->
 <section class="text-center py-5" id="contact">
     <div class="container">
-        <h2 class="mb-4">Contact</h2>
+        <h2 class="mb-4">Контакти</h2>
         <p class="mb-4">
-            If you have any questions, feel free to reach out to us at
-            <a href="mailto:contact@yourwebsite.com">contact@yourwebsite.com</a>
+            У вас є питання або пропозиції? Ми завжди раді почути вас. Напишіть нам на адресу
+            <a href="mailto:contact@prompt-trainer.com">contact@prompt-trainer.com</a>
         </p>
         <form class="row g-3 justify-content-center">
             <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Your Name" required>
+                <input type="text" class="form-control" placeholder="Ваше ім'я" required>
             </div>
             <div class="col-md-4">
-                <input type="email" class="form-control" placeholder="Your Email" required>
+                <input type="email" class="form-control" placeholder="Ваш Email" required>
             </div>
             <div class="col-8">
-                <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
+                <textarea class="form-control" rows="4" placeholder="Ваше повідомлення" required></textarea>
             </div>
             <div class="col-8">
-                <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                <button type="submit" class="btn btn-primary btn-lg">Відправити повідомлення</button>
             </div>
         </form>
     </div>
@@ -225,7 +241,7 @@ Prompt gamified
 <footer class="footer py-3 border-top">
     <div class="container text-center">
         <a class="mx-2" href="https://github.com/Prompt-trainer/Prompt-trainer"><i class="bi bi-github"></i></a>
-        <small>&copy; 2026 Prompt Gamified. All Rights Reserved.</small>
+        <small>&copy; 2026 Prompt Trainer. All Rights Reserved.</small>
     </div>
 </footer>
 {% endblock %}

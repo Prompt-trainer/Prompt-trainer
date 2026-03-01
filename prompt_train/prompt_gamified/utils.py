@@ -66,7 +66,7 @@ def award_user_points(user, result: str) -> None:
         user.points += 10
 
     with transaction.atomic():
-        user.save(update_fields=["exp", "points"])
+        user.save(update_fields=["exp", "points", "rank"])
 
 
 def create_user_prompt(user_prompt_text: str, user) -> tuple[float, str, str]:

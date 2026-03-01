@@ -18,6 +18,8 @@ Including another URLconf
 from decouple import config
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 ADMIN_SITE_URL = config("ADMIN_SITE_URL", default="admin")
 
@@ -28,3 +30,6 @@ urlpatterns = [
     path("chat/", include("chat.urls")),
     path("accounts/", include("allauth.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

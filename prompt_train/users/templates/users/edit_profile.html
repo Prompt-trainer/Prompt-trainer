@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card text-center p-4 mx-auto" style="max-width: 600px;">
+    <div class="card-body d-flex flex-column justify-content-center">
+
+        <!-- Поточне фото профілю -->
+        {% if user.profile_picture %}
+        <div class="mb-3">
+            <img src="{{ user.profile_picture.url }}" alt="Поточне фото" 
+                class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        {% else %}
+            <p class="display-3"><i class="bi bi-person-circle"></i></p>
+        {% endif %}
+
+        <h5 class="card-title">Редагування профілю</h5>
+        
+        <form method="post" action="{% url 'auth:edit_profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p>Пароль: ******** <a href="{% url 'auth:password_change' %}">Змінити пароль</a></p>
+            <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

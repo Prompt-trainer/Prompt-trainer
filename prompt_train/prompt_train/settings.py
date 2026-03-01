@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.contrib import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
     "storages",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -152,6 +154,11 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Messages
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
+
 # Authentication settings
 LOGIN_URL = "auth:login"
 LOGIN_REDIRECT_URL = "prompt_gamified:home_page"
@@ -195,21 +202,50 @@ CHANNEL_LAYERS = {
             "hosts": [("redis", 6379)],
         },
     },
-}
+}   
 CHAT_ENCRYPTION_KEY = config("CHAT_ENCRYPTION_KEY")
 
 # ALL-AUTH
 
+# Робимо email унікальним
 ACCOUNT_UNIQUE_EMAIL = True
 
+# Вказуємо, що у нашій моделі CustomUser відсутнє поле username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = "email"
 
-# Вимикаємо перевірку email
-SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# Вимикаємо перевірку email при звичайній реєстрації.
+# Потрібно для підключення GitHub до існуючого акаунту
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Задаємо спосіб автентифікації - email
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+# Робимо email обов'язковим щоб запитувати його при відсутності
+# надавання email'у GitHubAPI. Пароль та нікнейм також є обов'язковими.
+# Поля username немає через його відсутність у базі даних
+ACCOUNT_SIGNUP_FIELDS = [
+    "nickname*",
+    "email*",
+    "password1*",
+    "password2*",
+]
+
+# Вимагаємо email при реєстрації через GitHub
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+
+# Вимикаємо перевірку email при реєстрації через GitHub,
+# користувач одразу активний
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"  
+
+# Дозволяємо логін без перевірки email
+SOCIALACCOUNT_LOGIN_ON_EMAIL_VERIFICATION = True
+
+# Задаємо кастомний адаптер, який перевизначає поведінку функцій
+# класу DefaultSocialAccountAdapter
 SOCIALACCOUNT_ADAPTER = "prompt_gamified.adapters.CustomSocialAccountAdapter"
+
+# Автоматично створюємо користувача без показу форми
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -218,13 +254,14 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": config("GITHUB_OAUTH_CLIENT_ID"),
             "secret": config("GITHUB_OAUTH_CLIENT_SECRET"),
         },
+        # Вказує, які дані отримуються від GitHub
+        # 1. "user" - username
+        # 2. user:email" - email користувача
         "SCOPE": ["user", "user:email"],
     },
 }
 
 # Logging configuration
-
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

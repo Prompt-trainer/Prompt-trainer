@@ -79,4 +79,4 @@ jobs:
     - name: Run tests
       run: |
         cd prompt_train
-        uv run python manage.py test
+        uv run python manage.py test --settings=prompt_train.settings_test

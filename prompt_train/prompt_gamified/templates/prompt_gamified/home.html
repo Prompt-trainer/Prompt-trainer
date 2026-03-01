@@ -6,11 +6,15 @@
 Головна
 {% endblock %}
 
+{% block styles %}
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
 
 {% block header %}
 <header class="py-4 border-bottom">
     <div class="container text-center">
-        <h1 class="display-6">Ласкаво просимо до Prompt Gamified!</h1>
+        <h1 class="display-6">Ласкаво просимо до Prompt trainer!</h1>
         <p class="lead">Прокачуй навички написання промптів через гру</p>
     </div>
 </header>
@@ -22,8 +26,31 @@
     <div class="col-md-4 my-4">
         <div class="card h-100 border-primary text-center">
             <div class="card-body d-flex flex-column justify-content-center">
-                <p class="display-3"><i class="bi bi-person-circle"></i></p>
+                <div class="profile-wrapper display-3">
+                    <!-- Фото профілю -->
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="{{ user.nickname }}" 
+                            class="rounded-circle mx-auto mb-3" 
+                            style="width: 120px; height: 120px; object-fit: cover;">
+                    {% else %}
+                        <i class="bi bi-person-circle profile-icon"></i>
+                    {% endif %}
+
+                    <!-- Декорації -->
+                    {% if user.active_ring %}
+                        <img class="cosmetic-ring-home" src="{% static user.active_ring.svg_code %}">
+                    {% endif %}
+
+                    {% if user.active_element %}
+                        <img class="cosmetic-element-home" src="{% static user.active_element.svg_code %}">
+                    {% endif %}
+                    
+                </div>
                 <h5 class="card-title">Профіль</h5>
+                <!-- Титул -->
+                {% if user.active_title %}
+                    <p><img class="cosmetic-title-home" src="{% static user.active_title.svg_code %}"></p>
+                {% endif %}
                 <p class="card-text">Хороший день для гри, {{ user.nickname }}!</p>
                 <p class="card-text mb-2">Твій ранг: {{ user.get_rank_display }}</p>
                 <p class="card-text mb-1">Твій досвід: </p>
@@ -31,24 +58,24 @@
 
                 <div class="progress mt-0 mb-2" role="progressbar"
                     aria-label="Досвід користувача"
-                    aria-valuenow="{{ user.exp }}" aria-valuemin="0" aria-valuemax="18">
+                    aria-valuenow="{{ user.exp }}" aria-valuemin="0" aria-valuemax="19">
                     <div class="progress-bar progress-bar-striped"
-                        style="width: {% widthratio user.exp 18 100 %}%">
+                        style="width: {% widthratio user.exp 19 100 %}%">
                         {{ user.exp }}
                     </div>
                 </div>
 
 
-                <p class="card-text">Твої очки: {{ user.points }} <i class="bi bi-hurricane"></i></p>
-                <a href="#" class="btn btn-outline-primary my-2">Переглянути профіль</a>
+                <p class="card-text">Твої поінти: {{ user.points }} <i class="bi bi-hurricane"></i></p>
+                <a href="{% url 'auth:profile' %}" class="btn btn-outline-primary my-2">Переглянути профіль</a>
             </div>
         </div>
     </div>
 
 
-    <div class="col">
-        <div class="row my-4">
-            <div class="col">
+    <div class="col d-flex flex-column justify-content-center">
+        <div class="row mt-4">
+            <div class="col mb-4">
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Тренування</h5>
@@ -59,7 +86,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-info text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Вгадай кращий промпт</h5>
@@ -70,7 +97,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-danger text-center p-3">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">🎯 Челендж</h5>
@@ -82,8 +109,8 @@
         </div>
 
 
-        <div class="row my-4">
-            <div class="col">
+        <div class="row">
+            <div class="col mb-4">
                 <div class="card h-100 border-success text-center p-2">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Бібліотека прикладів</h5>
@@ -94,7 +121,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col mb-4">
                 <div class="card h-100 border-warning text-center p-2">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title">Лідерборд</h5>
