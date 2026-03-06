@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from decouple import config
 from django.contrib import messages
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,13 +28,17 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="prompt-trainer.space,www.prompt-trainer.space").split(",")
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     "daphne",
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -152,6 +157,84 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 AUTH_USER_MODEL = "users.CustomUser"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+UNFOLD = {
+    "SITE_TITLE": "Prompt Trainer",
+    "SITE_HEADER": "Prompt Trainer Admin",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "school",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "COLORS": {
+        "primary": {
+            "50": "250 245 255",
+            "100": "243 232 255",
+            "200": "233 213 255",
+            "300": "216 180 254",
+            "400": "192 132 252",
+            "500": "168 85 247",
+            "600": "147 51 234",
+            "700": "126 34 206",
+            "800": "107 33 168",
+            "900": "88 28 135",
+            "950": "59 7 100",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Users",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "people",
+                        "link": reverse_lazy("admin:users_customuser_changelist"),
+                    },
+                    {
+                        "title": "Cosmetics",
+                        "icon": "palette",
+                        "link": reverse_lazy("admin:users_cosmetic_changelist"),
+                    },
+                    {
+                        "title": "User Cosmetics",
+                        "icon": "shopping_bag",
+                        "link": reverse_lazy("admin:users_usercosmetic_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Gamification",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Prompts",
+                        "icon": "psychology",
+                        "link": reverse_lazy("admin:prompt_gamified_prompt_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Chat",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Conversations",
+                        "icon": "forum",
+                        "link": reverse_lazy("admin:chat_conversation_changelist"),
+                    },
+                    {
+                        "title": "Messages",
+                        "icon": "chat",
+                        "link": reverse_lazy("admin:chat_message_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+}
 
 # Messages
 MESSAGE_TAGS = {
